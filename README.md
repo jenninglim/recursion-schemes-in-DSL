@@ -9,9 +9,9 @@
  
 * Hiding (explicit) recursion
 
- Parameterising Recursion
- Fix Point
- Data and Codata
+ Parameterising Recursion  
+ Fix Point  
+ Data and Codata  
  Algebra?
  
 * Catamorphism
