@@ -8,6 +8,7 @@
  Recurion Scheme
  
 * Hiding (explicit) recursion
+
  Parameterising Recursion
  Fix Point
  Data and Codata
