@@ -2,9 +2,10 @@
 
 ## Direction
 * Introduction
- Abstraction
- DSL
- Recursion
+
+ Abstraction  
+ DSL  
+ Recursion  
  Recurion Scheme
  
 * Hiding (explicit) recursion
