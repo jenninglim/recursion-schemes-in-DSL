@@ -13,15 +13,21 @@
  Parameterising Recursion  
  Fix Point  
  Data and Codata  
- Algebra?
- 
-* Catamorphism
- 
-* Anamorphism
 
-* Paramorphism
+* Crash Course Category Theory
 
-* Apomorphism
+ Categories
+ Functors
+ Algebras
+ 
+* Recursion Scheme
+
+ Catamorphism
+ Anamorphism
+ Paramorphism
+ Apomorphism
+ 
+* 
 
 * Example DSL? lhs
 
