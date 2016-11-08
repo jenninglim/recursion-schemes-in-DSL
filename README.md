@@ -22,3 +22,7 @@
 * Paramorphism
 
 * Apomorphism
+
+* Example DSL? lhs
+
+  Expr -> Pretty print
