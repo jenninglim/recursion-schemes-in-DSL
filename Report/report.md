@@ -3,22 +3,22 @@
 ## Introduction
 The most successful computer systems can stand the test of time;
 it requires numerous people to work together to test, maintain and update it throughout its lifespan.
-And abstraction,
-which is one of the most ubiquitous themes in computer science,
-provides a good strategy to do this by managing its complexity.
-Thus it comes as no surprise that the most successful modern programming languages depend on and exploit this
-by introducing a variety of abstraction techniques,
-each of which has encompassed the idea of generality.  
+Abstraction,
+one of the most ubiquitous concept in computer science,
+provides a good strategy to ensure its survival by managing its complexity.
+Thus it comes as no surprise that the most successful programming languages exploit this
+by introducing a variety of abstraction techniques for the programmer,
+each of which encompass the idea of generality.  
 
 Although generality is a good thing,
-a generic approach that provides solutions in multiple problem domains could mean that the solution is not an optimal one,
+a generic approach in multiple problem domains could mean that the solution is not an optimal one,
 that their very generality could count against them.
 This motivates the idea of programming languages designed specifically for a certain application,
 that is,
 it should capture the entirety of the semantics of the problem domain:
 it is _domain specific_.
 
-Domain specific languages (DSL) are often small languages that trade their generality for more expressivity (than general purpose language) over a specific domain and they are also often easier to use.
+Domain specific languages (DSL) are often small languages that over a specific domain offer more expressivity (than general purpose language). 
 
 There are two main ways of implementing a DSL: 
 
@@ -32,19 +32,22 @@ There are two main ways of implementing a DSL:
 
 There are two main approaches to implementing an embedded DSL:
 
-* Shallow: Its semantics are implemented directly and so they are represented as functions. 
+* Shallow: Its semantics are implemented directly so they are represented as functions. 
 * Deep: It is implemented by constructing an abstract syntax tree that represents the expression tree.
 
-In shallow embedding the semantics depend directly on the semantics of the composed term: it only captures compositional semantics.
+In shallow embedding the semantics depend directly on the semantics of the composed term:
+it only captures compositional semantics.
 In contrast,
 it is possible to define a complex interpretation,
 that is non-compositional,
-of deep embedding that cannot be represented in shallow embedding. Even though this is possible, Gibbons et al say that they are equivalent.
+of deep embedding that cannot be represented in shallow embedding.
+Even though this is possible, Gibbons et al say that they are equivalent.
 
 It is extremely common to have nested data structures in a problem domain,
-so it is trivial to define an equivalent data representation in the DSL.
+so it is common to define an equivalent data representation in the DSL.
 However,
-to traverse such a structure, we require a recursive function.
+to traverse such a structure,
+we require a recursive function.
 Because of their abundance,
 programmers often do not notice that they are using recursive functions so the idea of generalising traversals could replace a large amount of type specific functions that utilises recursion.
 
@@ -53,40 +56,43 @@ a set of combinators that formulates the process of traversing and evaluating so
 This generalisation allows us to structure our program in a well-defined way by decoupling how a function recurse over a data structure from the underlying purpose of the function meaning,
 this means programmers can just focus on what the function is actually does.
 
-The authors begin to criticising those who functionally program without recursion schemes, comparing them to imperative programmers who use gotos.
-In Djikstra’s letter to the ACM where he expressed his concerns that goto masks the flow of the program; here the use of unstructured (explicit) recursion obscures the underlying algorithmic structure, making it hard to prove arbitrary properties of the function, the analogy here is appropriate.
+The authors begin to criticising those who functionally program without recursion schemes,
+comparing them to imperative programmers who use gotos.
+In Djikstra’s letter to the ACM where he expressed his concerns that goto masks the flow of the program;
+here the use of unstructured (explicit) recursion obscures the underlying algorithmic structure,
+making it hard to prove arbitrary properties of the function,
+the analogy here is appropriate.
 
 The purpose of this essay is to introduce the idea of recursion schemes.
 The structure of the report is as follows:
 
-1. Abstract concepts from Category theory which has found its way into Haskell's list of abstraction techniques (that are used in this report) will be introduced in the first section.
-2. "Regular" data types can be rewritten using ideas from lambda calculus.
+1. Abstract concepts from Category theory has found its way into Haskell's list of abstraction techniques (that are used in this report) will be introduced in the first section.
+2. "Regular" data types can be rewritten using fix points.
 3. Meijer et al introduced a set of recursion schemes: catamorphism, anamorphism, paramorphism, apomorphism. We will show its implementation in Haskell.
 4. Conclusion, we will reflect on recursion schemes and its uses in a domain specific language.
 
-## Crash course category theory (Draft)
-Category Theory is a branch of mathematics infamous for its abstract nonsense,
-the idea came from abstracting concepts from algebraic topology.
+## Crash Course: Category Theory (Draft)
+Abstracting concepts from algebraic topology has yielded the infamous abstract nonsense of Category Theory.
 Regardless of its origins, it has proved very useful in computer science.
-Since, as programmers, we work with functions throughout our daily life and each function has the idea of composition (as long as their types match)
-This is exactly the structure the category theory captures.
-Unsurprisingly, ideas from this theory can be exploited,
-an example is the very recursion schemes that we will be studying.
+Since, as programmers, we work with functions throughout our daily life and each function (as long as their types match) can be composed.
+This is exactly the structure that category theory captures.
+Unsurprisingly, ideas from this theory can be exploited;
+an example, is in the very recursion schemes that we will be studying.
 
 A category is an algebraic structure defined on a collection of objects and morphisms (or arrows)
 that can be thought of as special functions between objects.
 There are also other properties the morphisms must satisfy such as associativity and composition.
 Because of the abstract nature of a category,
 it can be used as a model of computation,
-where the types can be modeled as objects in a category and program expressions, our morphisms.
+where the types corresponds to objects in a category and program expressions, our morphisms.
 
 The concept of a functor is to serve as a structure preserving map between categories.
 It must therefore preserve the relationship between the objects,
-arrows and the additional properties of each morphism.
-This structure preserving nature of the functor is captured by the functor laws,
-that each and every functor must hold true.
+morpisms and its properties:
+this is captured by the functor laws,
+that each and every functor must satisfy.
 A functor, specifically an endofunctor,
-is used represent type constructors in our high-level programming language.
+is used to model type constructors in our high-level programming language.
 Because of the importance of functors in category theory,
 it is unsurprising that they are ubiquitous in programming,
 certain functors can be further generalised into applicative functors,
@@ -124,6 +130,7 @@ The categoric dual of the initial algebra is the _final co-algebra_.
 
 
 ## Hiding (explicit) recursion
+### Pattern Functors
 Let’s consider a very simple language of addition and subtraction.
 
 ```
@@ -145,6 +152,8 @@ we have parameterised this type in terms of its subexpression,
 this is called the _pattern functor_ which is almost identical to the original `Expr`.
 However, `ExprF` is not quite equivalent, we need to somehow arbitrarily nest `ExprF` in the definition.
 We will use the Y combinator to do this.
+
+### Fix points of functors
 
 In lambda calculus, it is not possible to refer to the function definition in its body; there is no feature for (explicit) recursion.
 However,
@@ -181,10 +190,10 @@ The categoric dual of the apomorphism.
 
 \pagebreak
 
-## Reference
+## References
 1. Shaw, Mary. Abstraction Techniques in modern programming languages. (1984). IEEE Software. Pages 10-26.
 2. Van Deursen, Arie. Klint, Paul. Visser, Joost. Domain-Specific Languages: An Annotated Bibliography. (2000). ACM SIGPLAN Notices.
-3. [1] Meijer, Erik. Fokkinga, Maarten. Paterson, Ross. Functional programming with bananas, lenses, envelopes and barbed wire. (1991). FPLCA. LNCS, vol. 523. Springer. Pages 124-144.
+3.  Meijer, Erik. Fokkinga, Maarten. Paterson, Ross. Functional programming with bananas, lenses, envelopes and barbed wire. (1991). FPLCA. LNCS, vol. 523. Springer. Pages 124-144.
 4. Gibbons, Jeremy. Wu, Nicholas. Folding domain-specific languages: Deep and shallow embedding (functional pearl). (2014).
 5. Menrik, Marjan. Heering, Jan. Sloane, Anthony. When and How to Develop Domain-Specific Languages. (2005) ACM Computing Surveys, vol.37. Pages 316-344.
 6. Lane, Saunders M. Categories for the Working Mathematician. Second Edition. Springer. {insert pages here}
