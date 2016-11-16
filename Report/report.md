@@ -72,25 +72,31 @@ The structure of the report is as follows:
 4. Conclusion, we will reflect on recursion schemes and its uses in a domain specific language.
 
 ## Crash Course: Category Theory (Draft)
-Abstracting concepts from algebraic topology has yielded the infamous abstract nonsense of Category Theory.
-Regardless of its origins, it has proved very useful in computer science.
+Abstracting concepts from algebraic topology has yielded nothing but "abstract nonsense";
+these ideas  has been formulised to form cathegory theory 
+which has proved very useful in computer scientists.
 Since, as programmers, we work with functions throughout our daily life and each function (as long as their types match) can be composed.
 This is exactly the structure that category theory captures.
-Unsurprisingly, ideas from this theory can be exploited;
-an example, is in the very recursion schemes that we will be studying.
+Unsurprisingly, these ideas can be exploited.
 
-A category is an algebraic structure defined on a collection of objects and morphisms (or arrows)
-that can be thought of as special functions between objects.
-There are also other properties the morphisms must satisfy such as associativity and composition.
-Because of the abstract nature of a category,
-it can be used as a model of computation,
-where the types corresponds to objects in a category and program expressions, our morphisms.
+But what is a category? It is an algebraic structure defined on a collection of objects and morphisms
+that can be thought of as special functions between objects that perserves its structure,
+these morphisms must also satisfy associativity and composition.
+Because of this, many category theorists believe that the morphisms are of greater significance than objects 
+because they reveal their true structure.
 
-The concept of a functor is to serve as a structure preserving map between categories.
-It must therefore preserve the relationship between the objects,
+It is natural to consider a structure perserving map between categories,
+leading us to the idea of functors.
+It must therefore additionally preserve the relationship between the objects,
 morpisms and its properties:
 this is captured by the functor laws,
 that each and every functor must satisfy.
+
+{Expand this out plus other}
+Because of the abstract nature of a category,
+it can be used as our model of computation,
+where the types corresponds to objects in a category and program expressions, our morphisms.
+
 A functor, specifically an endofunctor,
 is used to model type constructors in our high-level programming language.
 Because of the importance of functors in category theory,
