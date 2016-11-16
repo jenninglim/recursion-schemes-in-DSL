@@ -72,8 +72,8 @@ The structure of the report is as follows:
 4. Conclusion, we will reflect on recursion schemes and its uses in a domain specific language.
 
 ## Crash Course: Category Theory (Draft)
-Abstracting concepts from algebraic topology has yielded nothing but "abstract nonsense";
-these ideas  has been formulised to form cathegory theory 
+Abstracting concepts from algebraic topology has yielded nothing but "abstract nonsense",
+these ideas  has been formulised to form the infamous cathegory theory 
 which has proved very useful in computer scientists.
 Since, as programmers, we work with functions throughout our daily life and each function (as long as their types match) can be composed.
 This is exactly the structure that category theory captures.
