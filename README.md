@@ -1,24 +1,25 @@
 # y2-language-engineering
 
 ## Direction
-* Introduction
+* Introduction (Done needs re-reading).
 
  Abstraction  
  DSL  
  Recursion  
  Recurion Scheme
  
+ * Crash Course Category Theory
+
+ Categories -- Done
+ Functors -- Done
+ Algebras
+ Fix Points
+ 
 * Hiding (explicit) recursion
 
- Parameterising Recursion  
+ Parameterising Recursion  -- Done 
  Fix Point  
  Data and Codata  
-
-* Crash Course Category Theory
-
- Categories
- Functors
- Algebras
  
 * Recursion Scheme
 
