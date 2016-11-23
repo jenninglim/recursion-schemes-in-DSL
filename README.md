@@ -8,11 +8,11 @@
  Recursion  
  Recurion Scheme
  
- * Crash Course Category Theory
+* Crash Course Category Theory
 
  Categories -- Done
  Functors -- Done
- Algebras
+ Algebras and Coalgebra
  Fix Points
  
 * Hiding (explicit) recursion
@@ -28,7 +28,10 @@
  Paramorphism
  Apomorphism
  
-* 
+* Questions
+
+Shallow and Deep embedding have the same power?
+Corecursion in DSLs?
 
 * Example DSL? lhs
 
