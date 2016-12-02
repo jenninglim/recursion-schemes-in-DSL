@@ -1,4 +1,4 @@
-# Introduction of Recursion schemes in Domain Specific Language.
+# Introduction to Recursion schemes in Domain Specific Language.
 
 ## Introduction
 The most successful computer systems can stand the test of time;
