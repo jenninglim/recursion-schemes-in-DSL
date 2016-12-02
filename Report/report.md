@@ -18,17 +18,16 @@ that is,
 it should capture the entirety of the semantics of the problem domain:
 it is _domain specific_.
 
-Domain specific languages (DSL) are often small languages that over a specific domain offer more expressivity (than general purpose language). 
-
+Domain specific languages (DSL) are often small languages that, over a specific domain, offer more expressivity than general purpose language.  
 There are two main ways of implementing a DSL: 
 
 * Standalone: This is the classical approach; it involves implementing the domain specific language from scratch.
 
   {expand here}
 
-* Embedded languages: An existing general purpose programming language with all its constructs is used as a “based” to build a domain specific language.
+* Embedded languages: An existing general purpose programming language with all its constructs is used as a “base” to build a domain specific language.
 
-  An embedding programming language offer their expressive domain specific power as well as the additional power of its base general purpose language.
+An embedded programming language offer their expressive domain specific power as well as the additional power of its base general purpose language.
 
 There are two main approaches to implementing an embedded DSL:
 
@@ -44,17 +43,17 @@ of deep embedding that cannot be represented in shallow embedding.
 Even though this is possible, Gibbons et al say that they are equivalent.
 
 It is extremely common to have nested data structures in a problem domain,
-so it is common to define an equivalent data representation in the DSL.
+so it is common to define an equivalent recursive data representation in the DSL.
 However,
 to traverse such a structure,
 we require a recursive function.
 Because of their abundance,
-programmers often do not notice that they are using recursive functions so the idea of generalising traversals could replace a large amount of type specific functions that utilises recursion.
+programmers often do not notice that they are using recursive functions so the idea of generalising recursive traversals could replace a large amount of type specific functions.
 
 Meijer et al uses simple yet powerful abstract nonsense in category theory to introduced the idea of recursion schemes,
-a set of combinators that formulates the process of traversing and evaluating sophisticated inductive data structures.[3][1].
-This generalisation allows us to structure our program in a well-defined way by decoupling how a function recurse over a data structure from the underlying purpose of the function meaning,
-this means programmers can just focus on what the function is actually does.
+a set of combinators that formulates the process of traversing and evaluating inductive data structures. [3][1].
+This generalisation allows us to structure our program in a well-defined way by decoupling how a function recurse over a data structure from the underlying purpose of the function. 
+As a a result, programmers can just focus on what the function is actually does.
 
 The authors begin to criticising those who functionally program without recursion schemes,
 comparing them to imperative programmers who use gotos.
