@@ -72,30 +72,28 @@ The structure of the report is as follows:
 
 ## Crash Course: Category Theory (Draft)
 Abstracting concepts from algebraic topology has yielded nothing but "abstract nonsense",
-these ideas  has been formulised to form the infamous cathegory theory 
-which has proved very useful in computer scientists.
+these ideas  has been formulised to form the infamous category theory 
+which has proved very useful to computer scientists.
 Since, as programmers, we work with functions throughout our daily life and each function (as long as their types match) can be composed.
 This is exactly the structure that category theory captures.
-Unsurprisingly, these ideas can be exploited.
 
 But what is a category? It is an algebraic structure defined on a collection of objects and morphisms
 that can be thought of as special functions between objects that perserves its structure,
 these morphisms must also satisfy associativity and composition.
 Because of this, many category theorists believe that the morphisms are of greater significance than objects 
-because they reveal their true structure.
+because they reveal their true underlying structure.
 
 It is natural to consider a structure perserving map between categories,
-leading us to the idea of functors.
-It must therefore additionally preserve the relationship between the objects,
+leading us to the concept of functors.
+It must therefore, additionally, preserve the relationship between the objects,
 morpisms and its properties:
 this is captured by the functor laws,
 that each and every functor must satisfy.
 
 {Expand this out plus other}
 Because of the abstract nature of a category,
-it can be used as our model of computation,
+it can be used as a model of computation,
 where the types corresponds to objects in a category and program expressions, our morphisms.
-
 A functor, specifically an endofunctor,
 is used to model type constructors in our high-level programming language.
 Because of the importance of functors in category theory,
@@ -105,22 +103,25 @@ and even monads,
 which provide considerable more power but is sparse in comparison.
 
 In Haskell,
-a functor is defined as follows:
+a functor is defined as:
 
 ```
 class Functor f where
   fmap :: (a -> b) -> f a -> f b
 ```
 
-It is also important when providing an instance of functor to ensure that they satisfy the functor laws of:
+They must satisfy the functor laws:
 
 ```
-   fmap id = id
-   fmap (f . g) = fmap f . fmap g
+    -- Identity.
+    fmap id = id
+    
+    -- Composition.
+    fmap (f . g) = fmap f . fmap g
 ```
 
-The first law respects the idea of an identity in morphism
-and the second preserves the idea of composition of morphism.
+The first law preserves the idea of an identity morphism in each category,
+and the second preserves the idea of composition of each morphism.
 
 {introduction for algebra and coalgebra} 
 In mathematics, abstract structures such as groups are given an algebraic specification, this constitutes finite data.
@@ -156,14 +157,14 @@ In the new definition of `Expr`, `ExprF`,
 we have parameterised this type in terms of its subexpression,
 this is called the _pattern functor_ which is almost identical to the original `Expr`.
 However, `ExprF` is not quite equivalent, we need to somehow arbitrarily nest `ExprF` in the definition.
-We will use the Y combinator to do this.
+We will use the fix point combinator to do this.
 
 ### Fix points of functors
 
 In lambda calculus, it is not possible to refer to the function definition in its body; there is no feature for (explicit) recursion.
 However,
 by using Y combinator,
-we can replicate a recursive function.  
+we can replicate recursive behaviour.  
 It is, by definition, a higher-order function that takes a non-recursive function that satisfies the following:
 
 $$Y f = f (y  f) \forall f$$
