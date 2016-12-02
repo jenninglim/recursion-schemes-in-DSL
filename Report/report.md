@@ -185,14 +185,10 @@ especially for recursion schemes, where we can capture the pattern in a single c
 Meijer et al introduced the idea of the generalised fold called a catamorphism (from the greek preposition for destruction).
 In Category Theory, it denotes the unique homomorphism from an initial algebra into some other algebra.
 
-### Anamorphism
-The categoric dual of the catamorphism. Generalises unfold.
-
 ### Paramorphism
-Generalises recursion
+Paramorphims is a generalisation of primitive recursion making it more useful (and common) in comparison with the catamorphism.
 
-### Apomorphism
-The categoric dual of the apomorphism.
+### More Morphisms?
 
 \pagebreak
 
