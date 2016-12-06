@@ -1,8 +1,8 @@
 # Scheming a Problem
 ## Recursion Scheme in Domain Specific Languages.
 ## Abstract
-In this paper we will introduce structure recursion as a way to describe
-and reason with program semantics.
+In this paper we will introduce structure recursion.  
+{Add more here}
 
 ## Introduction
 Abstraction has proved to be one of the most influencial and ubiquitous themes
