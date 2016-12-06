@@ -6,10 +6,10 @@ and reason with program semantics.
 
 ## Introduction
 Abstraction has proved to be one of the most influencial and ubiquitous themes
-in computer science. It is perhaps unsurprising that its most notable success
-has been its occurrence in programming languages, the most sucessful must 
-provide various techniques such as higher-order functions, objects etc. for
-abstraction at the software level.
+in computer science. It is perhaps that its most notable triump has been its 
+significance in the design programming languages: the most sucessful must 
+provide various techniques for abstraction at the software level. such as 
+higher-order functions, objects etc.
 
 {Introduce DSL}
 
@@ -24,7 +24,6 @@ abstraction at the software level.
 ## Introduction to Category Theory
 {Motivation}
 
-{Category}
 But what is a category?  
 It is an algebraic structure defined on a collection of:
  * objects
@@ -36,7 +35,6 @@ identity for each object. Because of this, many category theorists believe that
 the morphisms are of greater significance than objects  because they reveal their
 true underlying structure.
 
-{Functor}
 It is natural to consider a structure preserving map similar idea to morphism but
 for categories, this is the concept behind a functor. It is formally, F : C -> D
 consists of:
