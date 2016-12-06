@@ -49,10 +49,16 @@ An endofunctor is an functor from a category to itself.
 
 In Haskell, the definition of a functor is reflected with the categorical
 endofunctor, defined as follows:
- * 
-
-
-
+```
+class Functor f where
+  fmap :: (a -> b) -> f a -> f b
+```
+The additional properties that a categoric functor must satisfied, is captured in
+haskell by the functor laws, that each an every instance must satisfy:
+```
+    fmap id = id
+    fmap (f . g) = fmap f . fmap g
+```
 
 {Algebra}
 
