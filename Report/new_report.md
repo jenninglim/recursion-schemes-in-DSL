@@ -26,8 +26,10 @@ higher-order functions, objects etc.
 
 But what is a category?  
 It is an algebraic structure defined on a collection of:
- * objects
- * morphisms
+
+ * objects.
+ * morphisms.
+ 
 Morphisms can be thought of as special functions between objects that perserves
 its structure satisfying associativity, composition and the existence of an
 identity for every object. Because of this, many category theorists believe that
@@ -49,8 +51,8 @@ An endofunctor is an functor from a category to itself.
 In Haskell, the definition of a functor is reflected with the categorical
 endofunctor, defined as follows:
 ```
-class Functor f where
-  fmap :: (a -> b) -> f a -> f b
+  class Functor f where
+   fmap :: (a -> b) -> f a -> f b
 ```
 The additional properties that a categoric functor must satisfied, is captured in
 haskell by the functor laws, that each an every instance must satisfy:
