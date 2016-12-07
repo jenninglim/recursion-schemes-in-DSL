@@ -1,10 +1,10 @@
 # Introduction to Recursion schemes in Domain Specific Language.
 
 ## Introduction
-The most successful computer systems can stand the test of time;
+The most successful computer system can stand the test of time;
 it requires numerous people to work together to test, maintain and update it throughout its lifespan.
 Abstraction,
-one of the most ubiquitous concept in computer science,
+one of the most ubiquitous concepts in computer science,
 provides a good strategy to ensure its survival by managing its complexity.
 Thus it comes as no surprise that the most successful programming languages exploit this
 by introducing a variety of abstraction techniques for the programmer,
