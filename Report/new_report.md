@@ -12,7 +12,6 @@ significance in the design of programming languages: the most sucessful will
 provide various techniques for abstraction at the software level such as 
 higher-order functions, objects etc.
 
-{Introduce DSL}
 General Purpose Languages ("GPL") are programming languages designed to tackle 
 problems in every problem domain. Their generality pushes programmers to adopt
 them in their repetoire, however this makes them convoluted to anyone lacking
@@ -20,7 +19,6 @@ programming expertise. This motivates the idea of raising the abstraction
 level such that languages are designed for a particular problem domain:
 it is _domain specific_.
 
-{Embedded DSLs in depth.}
 Domain Specific Languages are, usually declarative, programming languages that
 offer more expressivity over a specific problem domain. Their development involves
 a close analysis of the problem domain such that the entire semantics of the
@@ -48,7 +46,6 @@ often extends functional languages - features part of this class of languages
 such as higher order functions, monads, algebraic data types makes the develop 
 of embedded DSL much easier.
 
-{Semantics as folds}
 The nature of functional languages has meant that its programs are _pure_.
 With no state or side-effects, many computation are naturally
 expressed as recursive functions. Unsurprisingly, many of which share the same recursive patterns
@@ -59,7 +56,6 @@ end there, in fact, the denotational semantics, an approach that gives mathemati
 of a program, can be structured and characterised by folding over its syntax[1]. This is why we can fold 
 DSL with great success [2].
 
-{Recursion schemes}
 This motivates us to look closely at the generalisations of folds and unfolds as a set of
 combinators introduced by Meijer et al called _recursion schemes_. They uses the abstract nonsense 
 of category theory to structure the traversing and evaluation of inductive data
@@ -79,7 +75,6 @@ The structure of the report is as follows:
    useful theorems.
 
 ## 0. Introduction to Category Theory
-{Motivation}
 Category Theory has proved to be indepensible in the development of functional
 programming. The nature of functional programming has meant that its programs
 consists of the idea of chaining functions together. This is exactly the 
@@ -108,29 +103,35 @@ true underlying structure.
 It is natural to consider a structure preserving map similar idea to morphism but
 for categories, this is the concept behind a functor. It is formally, a Functor
 F : C -> D consists of:
+
  * mapping A-> FA: C -> D
  * mapping f -> F f: C(A,B) -> D(FA, FB).
+ 
 such that:
+
  * F id = id
  * F(g.f) = F g .F f
+
 These additional laws respect the nature of a morphism in the category by
 perserving the identity and the composition of morphisms.
 An endofunctor is an functor from a category to itself.
 
 In Haskell, the definition of a functor is reflected with the categorical
 endofunctor, defined as follows:
+
 ```
   class Functor f where
     fmap :: (a -> b) -> f a -> f b
 ```
+
 The additional properties that a categoric functor must satisfied, is captured in
 Haskell by the functor laws, that each and every instance must satisfy:
+
 ```
   fmap id = id
   fmap (f . g) = fmap f . fmap g
 ```
 
-{Algebra}  
 Given a category C and an endofunctor F: C -> C then an F-algebra is a tuple
 (A,f) where A is an object in C and f is a morphism F(A) -> A. The object A
 is called the _carrier_ of the algebra.
@@ -141,8 +142,7 @@ In Haskell, the definition of an F-Algebra is found in `Control.Functor.Algebra`
   type Algebra f = f a -> a
 ```
 
-
-
+{Expand on Algebras}
 
 ## 1. Explicit and Structured Recursion
 {Explicit Recursion}
@@ -182,7 +182,26 @@ somehow arbitrarily nest `ExprF` in the definition.
 
 ### 2.2 Fix Point of Functors
 
-{Brief Explaination}
+In lambda calculus, it is not possible to refer to the function definition in its body;
+there is no feature for (explicit) recursion. However, by using the paradoxical Y 
+combinator, we can replicate recursive behaviour. It is, by definition, a higher-order 
+function, f, that takes a non-recursive function that satisfies the following:
+
+$$y f = f (y  f) \forall f$$
+
+This concept can be defined in Haskell's type definition as follows: 
+
+```
+Fix f = In (f (Fix f))
+```
+
+By using `Fix`, we can define our corresponding pattern functor in such a way that
+it is isomorphic to the original definition,
+
+Fix ExprF ~ Expr
+
+This technique of redefining recursive data types is very powerful however
+for most people this non-recursive definition is harder to reason with.
 
 ## Catamorphism
 {Definition}
