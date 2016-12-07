@@ -25,8 +25,8 @@ Domain Specific Languages are, usually declarative, programming languages that
 offer more expressivity over a specific problem domain. Their development involves
 a close analysis of the problem domain such that the entire semantics of the
 problem domain should be captured - no more and no less. The nature of these
-languages implies that they trade their generality for focussed expressivity.
-Their nature often makes DSLs small languages since only the essential features is
+languages implies that they trade their generality for focused expressivity.
+This often makes DSLs small languages since only the essential features are
 captured, examples of DSLs include SQL, HTML, CSS etc.
 
 There are two main ways of developing DSLs:
@@ -35,25 +35,26 @@ There are two main ways of developing DSLs:
 * Embedded.
 
 Standalone is a classical approach for implementing a new language. It involves
-implementing the language from scratch, everything that you need in a language
-has to be developed, no concessions are made, everything about this language
-is tailored specifically to the problem domain. However, the nature of the 
-approach makes it very costly thus standalone DSLs are rarely developed.
+implementing the language from scratch: everything that you need in a language
+has to be developed, no concessions are made. The characteristics of this language
+is tailored specifically to the problem domain. However, the drawback of this 
+approach makes it very costly, as a result standalone DSLs are rarely developed.
 
-Embedding DSLs can be implemented by extending a GPL, this approach uses the
+Embedded DSLs are implemented by extending a GPL, this approach uses the
 existing language constructs to build the language. They share the generic 
 features of the base language thus the embedded DSL offer their domain specific
 expressive power as well as the additional power of its base GPL. Embedded DSLs
-often extends functional languages - the features part of this class of languages
-makes developing embedded DSL easier.
+often extends functional languages - features part of this class of languages
+such as higher order functions, monads, algebraic data types makes the develop 
+of embedded DSL much easier.
 
 {Semantics as folds}
 The nature of functional languages has meant that its programs are referentially
 transparent or _pure_. With no state or side-effects, many computation are naturally
 expressed as recursive functions. Unsurprisingly, many share the same recursive patterns
-that can be abstracted away. An example that many functional programmers will familiar
+which can be abstracted away. An example that many functional programmers will familiar
 with is  _fold_ as a stardard recursive operator, it captures the common pattern of
-traversing and processing a list. The abundance of the uses of recursion does not
+traversing and processing a list. The abundance of recursion does not
 end there, in fact, the denotational semantics of a program can be structured and 
 characterised by folding over its syntax[1]. This is why we can fold DSL with
 great success [2].
