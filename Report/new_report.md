@@ -50,23 +50,18 @@ of embedded DSL much easier.
 
 {Semantics as folds}
 The nature of functional languages has meant that its programs are _pure_.
-{change this}
 With no state or side-effects, many computation are naturally
-expressed as recursive functions. Unsurprisingly, many share the same recursive patterns
+expressed as recursive functions. Unsurprisingly, many of which share the same recursive patterns
 which can be abstracted away. An example that many functional programmers will be familiar
-with is  _fold_
-{example?}
-as a stardard recursive operator, it captures the common pattern of
+with is  _fold_ as a stardard recursive operator, it captures the common pattern of
 traversing and processing a structurally inductive data structure. The abundance of recursion does not
-end there, in fact, the denotational semantics 
-{definition here?}
-of a program can be structured and 
-characterised by folding over its syntax[1]. This is why we can fold DSL with
-great success [2].
+end there, in fact, the denotational semantics, an approach that gives mathematical models to the semantics
+of a program, can be structured and characterised by folding over its syntax[1]. This is why we can fold 
+DSL with great success [2].
 
 {Recursion schemes}
-This motivates us to look at the generalisations of folds and unfolds as a set of
-combinators, called _recursion schemes_. Meijer et al uses the abstract nonsense 
+This motivates us to look closely at the generalisations of folds and unfolds as a set of
+combinators introduced by Meijer et al called _recursion schemes_. They uses the abstract nonsense 
 of category theory to structure the traversing and evaluation of inductive data
 structures.
 
@@ -93,12 +88,16 @@ modelled as a _category_, where the types form the objects and functions between
 two types, the morphism.
 
 But what is a category?  
-It is an algebraic structure defined on a collection of:
+A category C is an algebraic structure defined on a collection of:
 
- * objects.
- * morphisms.
+ * objects (denoted A, B, C, ...)
+ * morphism between a pair A,B denoted C(A,B)
  
- {Add details about id object and composition of morphisms}
+additionally, they must satsify:
+
+ * for each object A, there is an identity morphism.
+ * the morphisms are associative.
+ * for every object a,bc a binary operation called the _composition of morphisms_.
  
 Morphisms can be thought of as special functions between objects that perserves
 its structure satisfying associativity, composition and the existence of an
@@ -131,7 +130,18 @@ Haskell by the functor laws, that each and every instance must satisfy:
   fmap (f . g) = fmap f . fmap g
 ```
 
-{Algebra}
+{Algebra}  
+Given a category C and an endofunctor F: C -> C then an F-algebra is a tuple
+(A,f) where A is an object in C and f is a morphism F(A) -> A. The object A
+is called the _carrier_ of the algebra.
+
+In Haskell, the definition of an F-Algebra is found in `Control.Functor.Algebra`
+
+```
+  type Algebra f = f a -> a
+```
+
+
 
 
 ## 1. Explicit and Structured Recursion
