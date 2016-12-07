@@ -49,8 +49,7 @@ such as higher order functions, monads, algebraic data types makes the develop
 of embedded DSL much easier.
 
 {Semantics as folds}
-The nature of functional languages has meant that its programs are referentially
-transparent or _pure_.
+The nature of functional languages has meant that its programs are _pure_.
 {change this}
 With no state or side-effects, many computation are naturally
 expressed as recursive functions. Unsurprisingly, many share the same recursive patterns
@@ -67,7 +66,7 @@ great success [2].
 
 {Recursion schemes}
 This motivates us to look at the generalisations of folds and unfolds as a set of
-combinators, called _Recursion Schemes_. Meijer et al uses the abstract nonsense 
+combinators, called _recursion schemes_. Meijer et al uses the abstract nonsense 
 of category theory to structure the traversing and evaluation of inductive data
 structures.
 
