@@ -50,12 +50,18 @@ of embedded DSL much easier.
 
 {Semantics as folds}
 The nature of functional languages has meant that its programs are referentially
-transparent or _pure_. With no state or side-effects, many computation are naturally
+transparent or _pure_.
+{change this}
+With no state or side-effects, many computation are naturally
 expressed as recursive functions. Unsurprisingly, many share the same recursive patterns
-which can be abstracted away. An example that many functional programmers will familiar
-with is  _fold_ as a stardard recursive operator, it captures the common pattern of
-traversing and processing a list. The abundance of recursion does not
-end there, in fact, the denotational semantics of a program can be structured and 
+which can be abstracted away. An example that many functional programmers will be familiar
+with is  _fold_
+{example?}
+as a stardard recursive operator, it captures the common pattern of
+traversing and processing a structurally inductive data structure. The abundance of recursion does not
+end there, in fact, the denotational semantics 
+{definition here?}
+of a program can be structured and 
 characterised by folding over its syntax[1]. This is why we can fold DSL with
 great success [2].
 
@@ -92,6 +98,8 @@ It is an algebraic structure defined on a collection of:
 
  * objects.
  * morphisms.
+ 
+ {Add details about id object and composition of morphisms}
  
 Morphisms can be thought of as special functions between objects that perserves
 its structure satisfying associativity, composition and the existence of an
