@@ -145,6 +145,9 @@ In Haskell, the definition of an F-Algebra is found in `Control.Functor.Algebra`
 {Expand on Algebras}
 
 ## 1. Explicit and Structured Recursion
+
+Recursion is a simple but powerful concept that forms the bread and butter
+for functional computation. The rich profusion of which impli
 {Explicit Recursion}
 
 {Structured Recursion}
