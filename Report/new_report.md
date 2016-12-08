@@ -7,7 +7,7 @@ semantics.
 
 ## Introduction
 Abstraction has proved to be one of the most influencial and ubiquitous themes
-in computer science. It is unsurprising that its most notable triumph has been its 
+in computer science. It is unsurprising that one of its most notable triumph has been its 
 significance in the design of programming languages: the most sucessful will 
 provide various techniques for abstraction at the software level such as 
 higher-order functions, objects etc.
@@ -19,7 +19,7 @@ programming expertise. This motivates the idea of raising the abstraction
 level such that languages are designed for a particular problem domain:
 it is _domain specific_.
 
-Domain Specific Languages are, usually declarative, programming languages that
+Domain Specific Languages ("DSL") are, usually declarative, programming languages that
 offer more expressivity over a specific problem domain. Their development involves
 a close analysis of the problem domain such that the entire semantics of the
 problem domain should be captured - no more and no less. The nature of these
@@ -40,8 +40,8 @@ approach makes it very costly, as a result standalone DSLs are rarely developed.
 
 Embedded DSLs are implemented by extending a GPL, this approach uses the
 existing language constructs to build the language. They share the generic 
-features of the base language thus the embedded DSL offer their domain specific
-expressive power as well as the additional power of its base GPL. Embedded DSLs
+features of the base language thus the embedded DSL offer addition power of its base GPL
+as well as their domain specific expressive power. Embedded DSLs
 often extends functional languages - features part of this class of languages
 such as higher order functions, monads, algebraic data types makes the develop 
 of embedded DSL much easier.
@@ -66,7 +66,7 @@ The structure of the report is as follows:
 
 1. A brief introduction to Category Theory - Many ideas in Haskell have originated from
    category theory and arguably the reason why functional programming is so succesful.
-   This section is an optional read and purely for interest.
+   This section introduces the necessary knowledge for understanding the report.
 2. Explicit and Structure Recursion - We will begin by discussing the drawbacks of explicit 
    recursion and  why we should always use structured programming if possible.
 3. Pattern Functors and Fix-point of functors - Given a recursive data structure we will
@@ -146,11 +146,13 @@ In Haskell, the definition of an F-Algebra is found in `Control.Functor.Algebra`
 
 ## 1. Explicit and Structured Recursion
 
-Recursion is a simple but powerful concept that forms the bread and butter
-for functional computation. The rich profusion of which impli
-{Explicit Recursion}
+Recursion in its essense is something defined in terms of itself. It is a simple 
+but powerful concept that forms the bread and butter for functional computation.
+Primitive recursion is a type of recursion
 
 {Structured Recursion}
+Its profuseness has meant that abstracting away common patterns could replace a
+plethora of primitive recursive functions. Meijer et al has introduced
 
 {Advantages of structuring recursion}
 
@@ -214,6 +216,6 @@ for most people this non-recursive definition is harder to reason with.
 {Theorems}
 
 ## References
-[1] Fold and Unfold for Program Semantics.
-[2] Folding DSL: Deep and Shallow Embedding.
-[3] Functional programming with bananas, lenses, envelopes and barbed wire.
+[1] Fold and Unfold for Program Semantics.  
+[2] Folding DSL: Deep and Shallow Embedding.  
+[3] Functional programming with bananas, lenses, envelopes and barbed wire.  
