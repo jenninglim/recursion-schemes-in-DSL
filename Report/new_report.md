@@ -1,4 +1,4 @@
-# Scheming a Problem
+# Scheming it all.
 ## Recursion Scheme in Domain Specific Languages.
 ## Abstract
 In this paper we will introduce structure recursion as a way to derive program
@@ -7,8 +7,8 @@ semantics.
 
 ## Introduction
 Abstraction has proved to be one of the most influencial and ubiquitous themes
-in computer science. It is unsurprising that one of its most notable triumph has been its 
-significance in the design of programming languages: the most sucessful will 
+in computer science. It is unsurprising that one of its most notable triumphs has been its 
+significance in the design of programming languages. The most successful will 
 provide various techniques for abstraction at the software level such as 
 higher-order functions, objects etc.
 
@@ -61,7 +61,6 @@ combinators introduced by Meijer et al called _recursion schemes_. They uses the
 of category theory to structure the traversing and evaluation of inductive data
 structures.
 
-{Structure}
 The structure of the report is as follows:
 
 1. A brief introduction to Category Theory - Many ideas in Haskell have originated from
@@ -80,7 +79,7 @@ programming. The nature of functional programming has meant that its programs
 consists of the idea of chaining functions together. This is exactly the 
 structure that category theory captures. Haskell types and functions can be
 modelled as a _category_, where the types form the objects and functions between
-two types, the morphism.
+two types, the morphism. 
 
 But what is a category?  
 A category C is an algebraic structure defined on a collection of:
@@ -101,8 +100,9 @@ the morphisms are of greater importance than objects  because they reveal the
 true underlying structure.
 
 It is natural to consider a structure preserving map similar idea to morphism but
-for categories, this is the concept behind a functor. It is formally, a Functor
-F : C -> D consists of:
+for categories. The functor is a mapping between categories but with additional
+properties so that the categorical structure is preserved.  
+It is formally, a Functor F : C -> D consists of:
 
  * mapping A-> FA: C -> D
  * mapping f -> F f: C(A,B) -> D(FA, FB).
@@ -113,10 +113,10 @@ such that:
  * F(g.f) = F g .F f
 
 These additional laws respect the nature of a morphism in the category by
-perserving the identity and the composition of morphisms.
-An endofunctor is an functor from a category to itself.
+preserving the identity and the composition of morphisms.  
 
-In Haskell, the definition of a functor is reflected with the categorical
+An endofunctor is an functor from a category to itself. 
+In Haskell, the definition of a functor corresponds with the categorical
 endofunctor, defined as follows:
 
 ```
@@ -143,23 +143,43 @@ In Haskell, the definition of an F-Algebra is found in `Control.Functor.Algebra`
 ```
 
 {Expand on Algebras}
+{Introduce ideas of initiality}
 
 ## 1. Explicit and Structured Recursion
 
-Recursion in its essense is something defined in terms of itself. It is a simple 
-but powerful concept that forms the bread and butter for functional computation.
-Primitive recursion is a type of recursion
+Recursion in its essence is something defined in terms of itself.
+It is a simple yet powerful concept that forms the bread and
+butter for functional computation. Explicit recursion is a way of
+describing recursion that is overused for the uninitiated. 
+Arbitrary properties of the function  will need to be written and 
+proved over and over again which can be simply avoided by carefully
+abstracting away common recursive patterns.
 
-{Structured Recursion}
-Its profuseness has meant that abstracting away common patterns could replace a
-plethora of primitive recursive functions. Meijer et al has introduced
+Its profuseness implies that abstracting away common patterns could
+replace a plethora of explicit recursive functions. Meijer et al
+introduced a set of recursive operators that models different types
+of recursion. The catamorphism models iteration which is a special
+case of primitive recursion which is modelled by the paramorphism.
+Meijer also introduced its duals for unfolds and corecursion,
+anamorphism and apomorphism but they are outside the scope of the essay.
 
-{Advantages of structuring recursion}
+We have known for a long time the use of `gotos` in imperative programming
+obscures the structure of the program and reduces the programmers ability to 
+reason with our code. For the same reason `gotos` should be avoided, we
+should always use structured recursion whenever possible. This is because
+although explicit recursion is more intuitive, structural recursion provides
+a way to reason with our code like never before. They provide us with a catalogues
+of useful theorems and properties what we can infer in our functions for free.
+Additionally, as a byproduct of abstracting away the format of traversals, we
+have separated how the function is computed rather than its underlying purpose.
+This means for programmers, trained in the art of structuring recursion, 
+can concentrate on the what the computation is doing rather than how.
 
 ## 2. Hiding (explicit) recursion
 
 In Section 2, we have detailed the differences between explicit and structured
-recursion, and explained why structure recursion should always be used.
+recursion and explained that whenever there is a choice between structured
+and explicit recursion, structured recursion should always be used.
 
 ### 2.1 Parameterising Recursion
 
@@ -171,7 +191,7 @@ data Expr = Val Int
           | Sub Expr Expr
 ```
 
-We can have parameterised the recursion, by marking the recursive spot x:
+We can have parameterised the recursion, by marking the recursive spot `x`:
 
 ```
 data ExprF x = Val Int
@@ -182,7 +202,27 @@ data ExprF x = Val Int
 In the new definition of `Expr`, `ExprF`,
 we have parameterised this type in terms of its subexpression,
 this is called the _pattern functor_ which is almost identical to the
-original `Expr`. However, `ExprF` is not quite equivalent, we need to
+original `Expr`.
+
+It is trivial to make ExprF an instance of `functor`.
+
+```
+instance Functor ExprF where
+  fmap :: (a -> b) -> f a -> f b
+  fmap f (Val Int) = Int
+  fmap f (Add x y) = Add (f x) (f x)
+  fmap f (Sub x y) = Sub (f x) (f y)
+```
+
+In fact, it is so trivial that GHC can derive it for us if we 
+enable the following extension, called a language pragma:
+
+```
+{-# LANGUAGE DeriveFunctor #-}
+```
+and we can just use `Deriving Functor` in our data declaration.
+
+However, `ExprF` is not quite equivalent, it need to
 somehow arbitrarily nest `ExprF` in the definition.
 
 ### 2.2 Fix Point of Functors
@@ -200,22 +240,30 @@ This concept can be defined in Haskell's type definition as follows:
 Fix f = In (f (Fix f))
 ```
 
-By using `Fix`, we can define our corresponding pattern functor in such a way that
-it is isomorphic to the original definition,
+By using `Fix`, we can define our corresponding pattern functor
+in such a way, called the fixed point of functors, which is
+isomorphic to the original definition,
 
 Fix ExprF ~ Expr
 
-This technique of redefining recursive data types is very powerful however
-for most people this non-recursive definition is harder to reason with.
+This technique of redefining recursive data types is very powerful.
+Interestingly [4], the fixed point of functors corresponds to the 
+initial algebra.  
+BOOM.
 
 ## Catamorphism
-{Definition}
+Catamorphism are generalisations of folds, it replicates the concept of 
+iterative functions by destroying the data structure while traversing it.
 
 {Concrete Example}
 
 {Theorems}
+{Fusion}
+{cata compose}
+{Banana Split Theorem}
 
 ## References
 [1] Fold and Unfold for Program Semantics.  
 [2] Folding DSL: Deep and Shallow Embedding.  
 [3] Functional programming with bananas, lenses, envelopes and barbed wire.  
+[4] Recursive types for free.
