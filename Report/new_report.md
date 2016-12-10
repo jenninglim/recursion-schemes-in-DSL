@@ -8,12 +8,14 @@ Abstract
 --------
 
 In this paper we will introduce structure recursion as a way to derive
-program semantics. {Add more here}
+program semantics. In particular, we are interested in denotational
+semantics which can be structured as a fold. This motivates us to look
+its generalised notion as a recursive operation: the _catamorphism_.
 
-§ 1. Introduction
+ Introduction
 -----------------
 
-Abstraction has proved to be one of the most influencial and ubiquitous
+Abstraction has proved to be one of the most influential and ubiquitous
 themes in computer science. It is unsurprising that one of its most
 notable triumphs has been its significance in the design of programming
 languages. The most successful will provide various techniques for
@@ -88,9 +90,9 @@ The structure of the report is as follows:
 3.  Pattern and Fix-point of functors - Given a recursive data structure
     we will show how to abstract away recursion at the type level.
 4.  Catamorphism - The generalised fold. We will discuss its
-    implementation and present useful theorems.
+    derivation, present useful theorems and termination.
 
-§ 1. Introduction to Category Theory
+Introduction to Category Theory
 ------------------------------------
 
 Category theory is one of the most abstract theory in mathematics, it is
@@ -176,7 +178,7 @@ algebras are interesting for computer scientist because certain data
 types particularly Lists and Trees \[4\], this idea will be developed on
 in Section 3.
 
-§ 2. Explicit and Structured Recursion
+ Explicit and Structured Recursion
 --------------------------------------
 
 Recursion in its essence is something defined in terms of itself. It is
@@ -210,7 +212,7 @@ recursion,
 
 can concentrate on the what the computation is doing rather than how.
 
-§ 3. Hiding (explicit) recursion
+ Hiding (explicit) recursion
 --------------------------------
 
 In Section 2, we have detailed the differences between explicit and
@@ -218,7 +220,7 @@ structured recursion and explained that whenever there is a choice
 between structured and explicit recursion, structured recursion should
 always be used.
 
-### § 3.1 Parameterising Recursion
+### Parameterising Recursion
 
 Let’s consider a very simple language of addition and subtraction.
 
@@ -255,7 +257,7 @@ and we can just use `Deriving Functor` in our data declaration.
 However, `ExprF` is not quite equivalent, it need to somehow arbitrarily
 nest `ExprF` in the definition.
 
-### § 3.2 Fix Point of Functors
+### Fix Point of Functors
 
 In lambda calculus, it is not possible to refer to the function
 definition in its body; there is no feature for (explicit) recursion.
@@ -279,15 +281,28 @@ This technique of redefining recursive data types is very powerful.
 Interestingly \[4\], the fixed point of functors corresponds to the
 initial algebra, an F-algebra (Fix f, In).
 
-§ 4. Catamorphism
------------------
+ Recursion Schemes
+----------------------
+
+Recursion schemes arise from attempts to tame the power of recursion,
+there is now a large zoo of formalised recursive operators that model
+different types of recursion. There has been attempts to unify these
+recursive schemes [citations here], that are outside the scope of this
+report.
+
+Because of nature of program semantics, in particular, denotational can
+be structured as a fold [1] which in the zoo of recursion scheme is called
+the catamorphism, For this reason, we are particularly interested in the catamorphism and will be the main focus of this section. References might be made to other recursive operators to
+provide a idea that recursive are not just recursive, they can be corecursive - generates data - and refolds - combination of both recursion and corecursion.
+
+###  Catamorphism
 
 Catamorphism are generalisations of folds, it replicates the concept of
 iterative functions by destroying the data structure while traversing
 it. It requires help from an f-algebra (A, alg), to slowly devour the
 data type represented as an initial algebra (Fix f, In).
 
-### § 4.1 Derivation
+###  Derivation
 
 {Diagram here}
 
@@ -304,8 +319,8 @@ This is can be implemented in Haskell as follows:
 
 For example, consider the natural numbers
 
-       type Nat = Fix NatF
-       data NatF k = Zero
+      type Nat = Fix NatF
+      data NatF k = Zero
                    | Succ k
                    deriving Functor
       
@@ -314,13 +329,13 @@ For example, consider the natural numbers
         where alg (Zero)   = 0
               alg (Succ k) = k + 1
 
-### 4.2 Theorems
+###  Theorems
 
 By using catamorphism, one of the many forms of structural recursion.
 One of the most pleasant results of using the catamorphism is we can use
 the catalogue of laws\[4\] for free!
 
-#### Fusion
+####  Fusion
 
 Fusion law for catamorphism \[4\] allows a function utilising a
 composition of catamorphism to transformed to a single catamorphism. It
@@ -329,37 +344,85 @@ speed up performance.
 
       h . f = g . fmap h => h . cata f = cata g
 
-where
+where,
 
       f :: f a -> a
       g :: f b -> b
       h :: a -> b
 
-#### Composition
+{example}
+
+####  Composition
 
 It is not true generally that catamorphisms compose but there is a
 special case. The catamorphism compose law \[4\] states that:
 
-      cata f . cata (Fix . h) = cata (f . h)
+     cata f . cata (Fix . h) = cata (f . h)
 
-where
+where,
 
-      f :: f a -> a
-      h :: g a -> f a
+     f :: f a -> a
+     h :: g a -> f a
 
-#### Banana split theorem
+{example}
 
-#### Termination (Include This?)
+####  Banana split theorem
 
-The use of catamorphism gives us an ability to reason with its
+Algebras that are over the functor but with different carrier types can be combined
+such that more than one catamorphism can be performed at the same time. This is called
+the banana-split theorem [4], this states that:
+
+cata f &&& cata g = cata ( f . fmap fst &&& g . fmap snd )
+
+{example}
+
+### Program Termination
+
+As we have seen, by using the simplest example of a recursion
+scheme, we have an archive of extremely useful laws that we 
+obtain for free. Another byproduct of using certain recursion
+schemes is that it gives as the ability to reason with the 
+termination of the program.
+
+Using the catamorphism gives us the ability to guarantee its 
+termination. It  will only call the function again on the smaller
+elements of the inductively defined structure implying it will
+tend towards its base case, giving us termination. In contrast
+with explicit recursion, there is nothing to stop the programmer
+to recursively call the function on larger data type causing it 
+to never terminate. 
+
+The property of the guarantee of termination is  exclusive to the 
+paramorphism and catamorphism in the recursion schemes provided
+by Meijer et al. The anamorphism and apomorphism guarantees 
+co-termination. The hylomorphism is an interesting recursion scheme in its own 
+right, it consists of the composition of cata and anamorphism
+which models general recursion. This is a more powerful model 
+than primitive recursion modelled by the para and catamorphism,
+it also gives us turing completeness thus losing all guarantees of 
 termination.
+
+## Conclusion
+
+In this report, I have given a brief introduction to category
+theory. Concepts introduced are essential for giving us a
+streamlined derivation of the catamorphism, just one of many
+from the zoo of recursion schemes.
+
+We have discussed why structured recursion should always be
+used if possible over explicit recursion. Its strength lies
+in the properties that we can imply by using them as well
+as empowering our ability to reason with our code. Thus,
+I have given what I perceive to be the most useful.
 
 References
 ----------
 
 \[1\] Fold and Unfold for Program Semantics.\
+
 \[2\] Folding DSL: Deep and Shallow Embedding.\
 \[3\] Functional programming with bananas, lenses, envelopes and barbed
 wire.\
-\[4\] Recursive types for free. \[5\] Building Domain Specific Embedded
+\[4\] Recursive types for free.  
+\[5\] Building Domain Specific Embedded
 Language.
