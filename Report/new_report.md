@@ -167,12 +167,14 @@ F(A) -&gt; A. The object A is called the *carrier* of the algebra.
 A homomorphism an F-algebra (A,a) to another F-algebra (B,b) is a
 morphism C(A,B) such that f . a = F(f) . b.
 
+{f-algebra forms a category}
+
 In Haskell, the definition following definition is found in
 `Control.Functor.Algebra` to corresponds to the idea of an F-algebra.
 
       type Algebra f a = f a -> a
 
-The *initial algebra* is an an F-algebra where there exists a exactly
+The *initial algebra* is an f-algebra where there exists exactly
 one morphism from the initial algebra to all other algebras. Initial
 algebras are interesting for computer scientist because certain data
 types particularly Lists and Trees \[4\], this idea will be developed on
