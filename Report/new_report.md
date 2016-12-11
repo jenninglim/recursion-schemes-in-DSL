@@ -12,7 +12,7 @@ program semantics. In particular, we are interested in denotational
 semantics which can be structured as a fold. This motivates us to look
 its generalised notion as a recursive operation: the _catamorphism_.
 
- Introduction
+1 Introduction
 -----------------
 
 Abstraction has proved to be one of the most influential and ubiquitous
@@ -45,9 +45,9 @@ There are two main ways of developing DSLs:
 
 Standalone is a classical approach for implementing a new language. It
 involves implementing the language from scratch: everything that you
-need in a language has to be developed, no concessions are made. The
-characteristics of this language is tailored specifically to the problem
-domain. However, the drawback of this approach makes it very costly, as
+need in a language has to be developed, no concessions are made. Its
+characteristics are tailored specifically to the problem
+domain. However, the drawback to this approach is that it is very costly, as
 a result standalone DSLs are rarely developed.
 
 Embedded DSLs are implemented by extending a GPL, this approach uses the
@@ -59,17 +59,18 @@ features part of this class of languages such as higher order functions,
 monads, algebraic data types makes the develop of embedded DSL much
 easier.
 
-The nature of functional languages has meant that its programs are
-*pure*. With no state or side-effects, many computation are naturally
+The nature of functional languages, especially Haskell, have a strong
+emphasis on maintaining the _purity_ of its code.
+With no state or side-effects, many computation are naturally
 expressed as recursive functions. Unsurprisingly, many of which share
 the same recursive patterns which can be abstracted away. An example
 that many functional programmers will be familiar with is *fold* as a
 standard recursive operator, it captures the common pattern of
 traversing and processing a structurally inductive data structure. The
-abundance of recursion does not end there, in fact, the denotational
+abundant usage of folds is so extensive, in fact, the denotational
 semantics, an approach that gives mathematical models to the semantics
 of a program, can be structured and characterised by folding over its
-syntax\[1\]. This is why we can fold DSL with great success \[2\].
+syntax \[1\]. This is why we can fold DSL with great success \[2\].
 
 This motivates us to look closely at the generalisations of folds and
 unfolds as a set of combinators introduced by Meijer et al called
@@ -87,17 +88,17 @@ The structure of the report is as follows:
 2.  Explicit and Structure Recursion - We will begin by discussing the
     drawbacks of explicit recursion and why we should always use
     structured programming if possible.
-3.  Pattern and Fix-point of functors - Given a recursive data structure
+3.  Pattern and Fix Point of Functors - Given a recursive data structure
     we will show how to abstract away recursion at the type level.
-4.  Catamorphism - The generalised fold. We will discuss its
-    derivation, present useful theorems and termination.
+4.  Recursion Schemes - The generalised fold. We will discuss its
+    derivation, useful theorems and termination.
 
-Introduction to Category Theory
+2 Introduction to Category Theory
 ------------------------------------
 
 Category theory is one of the most abstract theory in mathematics, it is
 a study of mathematical structure. Its abstractness suggests it has more
-form than content but its general nature allows it to be applied to many
+form than content which perhaps is one of its strengths, its general nature allows it to be applied to many
 areas of computer science: from the design of programming languages to
 automata theory \[reference here?\].
 
@@ -142,8 +143,8 @@ such that:
 -   F id = id
 -   F(g.f) = F g .F f
 
-These additional laws respect the nature of a morphism in the category
-by preserving the identity and the composition of morphisms.
+These additional laws preserve the nature of a morphism in the category
+by respecting the identity and the composition of morphisms laws.
 
 An endofunctor is an functor from a category to itself. In Haskell, the
 definition of a functor corresponds with the categorical endofunctor,
@@ -160,14 +161,15 @@ must satisfy:
       fmap (f . g) = fmap f . fmap g
 
 There is one category of particular interest for use, the category of
-F-algebras. Given a category C and an endofunctor F: C -&gt; C then an
+F-algebras.  
+Given a category C and an endofunctor F: C -&gt; C then an
 F-algebra is a tuple (A,f) where A is an object in C and f is a morphism
-F(A) -&gt; A. The object A is called the *carrier* of the algebra.
-
-A homomorphism an F-algebra (A,a) to another F-algebra (B,b) is a
+F(A) -&gt; A. The object A is called the *carrier* of the algebra.  
+These algebras will form the objects of the category. It needs to
+be coupled with morphisms to form a category, in this case, it is 
+the homomorphism between f-algebras.  
+A homomorphism an f-algebra (A,a) to another F-algebra (B,b) is a
 morphism C(A,B) such that f . a = F(f) . b.
-
-{f-algebra forms a category}
 
 In Haskell, the definition following definition is found in
 `Control.Functor.Algebra` to corresponds to the idea of an F-algebra.
@@ -180,41 +182,43 @@ algebras are interesting for computer scientist because certain data
 types particularly Lists and Trees \[4\], this idea will be developed on
 in Section 3.
 
- Explicit and Structured Recursion
+3 Explicit and Structured Recursion
 --------------------------------------
 
 Recursion in its essence is something defined in terms of itself. It is
 a simple yet powerful concept that forms the bread and butter for
 functional computation. Explicit recursion is a way of describing
-recursion that is overused for the uninitiated. Arbitrary properties of
+self referencing functions that is overused for the uninitiated. Arbitrary properties of
 the function will need to be written and proved over and over again
 which can be simply avoided by carefully abstracting away common
 recursive patterns.
 
-Its profuseness implies that abstracting away common patterns could
+Its profuseness implies that by abstracting away common patterns, it could
 replace a plethora of explicit recursive functions. Meijer et al
-introduced a set of recursive operators that models different types of
+introduced a set of recursive operators that captures different types of
 recursion. The catamorphism models iteration which is a special case of
 primitive recursion which is modelled by the paramorphism. Meijer also
 introduced its duals for unfolds and corecursion, anamorphism and
-apomorphism but they are outside the scope of the essay.
+apomorphism. What is surprising perhaps, is that like the folds, unfolds
+can be used to structure and derive a type of program semantics called 
+operational semantics [1] where the meaning of the program is defined in 
+terms of transition functions during program execution. However,
+this lies outside the scope of this report.
 
 We have known for a long time the use of `gotos` in imperative
 programming obscures the structure of the program and reduces the
-programmers ability to reason with our code. For the same reason `gotos`
+programmers ability to reason with their code. For the same reason `gotos`
 should be avoided, we should always use structured recursion whenever
-possible. This is because although explicit recursion is more intuitive,
-structural recursion provides a way to reason with our code like never
+possible. This is because although explicit is more intuitive,
+structural recursion provides a way to reason with the programmer's code like never
 before. They provide us with a catalogues of useful theorems and
-properties what we can infer in our functions for free. Additionally, as
-a byproduct of abstracting away the format of traversals, we have
-separated how the function is computed rather than its underlying
+properties which we can infer in our functions for free. Additionally, as
+a byproduct of abstracting away the format of traversals, it 
+separates how the function is computed rather than its underlying
 purpose. This means for programmers, trained in the art of structuring
-recursion,
+recursion, can concentrate on what the computation is doing rather than how.
 
-can concentrate on the what the computation is doing rather than how.
-
- Hiding (explicit) recursion
+4 Hiding (explicit) recursion
 --------------------------------
 
 In Section 2, we have detailed the differences between explicit and
@@ -222,7 +226,7 @@ structured recursion and explained that whenever there is a choice
 between structured and explicit recursion, structured recursion should
 always be used.
 
-### Parameterising Recursion
+### 4.1 Parameterising Recursion
 
 Let’s consider a very simple language of addition and subtraction.
 
@@ -259,7 +263,7 @@ and we can just use `Deriving Functor` in our data declaration.
 However, `ExprF` is not quite equivalent, it need to somehow arbitrarily
 nest `ExprF` in the definition.
 
-### Fix Point of Functors
+### 4.2 Fix Point of Functors
 
 In lambda calculus, it is not possible to refer to the function
 definition in its body; there is no feature for (explicit) recursion.
@@ -283,7 +287,7 @@ This technique of redefining recursive data types is very powerful.
 Interestingly \[4\], the fixed point of functors corresponds to the
 initial algebra, an F-algebra (Fix f, In).
 
- Recursion Schemes
+5 Recursion Schemes
 ----------------------
 
 Recursion schemes arise from attempts to tame the power of recursion,
@@ -297,14 +301,14 @@ be structured as a fold [1] which in the zoo of recursion scheme is called
 the catamorphism, For this reason, we are particularly interested in the catamorphism and will be the main focus of this section. References might be made to other recursive operators to
 provide a idea that recursive are not just recursive, they can be corecursive - generates data - and refolds - combination of both recursion and corecursion.
 
-###  Catamorphism
+### 4.1 Catamorphism
 
 Catamorphism are generalisations of folds, it replicates the concept of
 iterative functions by destroying the data structure while traversing
 it. It requires help from an f-algebra (A, alg), to slowly devour the
 data type represented as an initial algebra (Fix f, In).
 
-###  Derivation
+### 4.2 Derivation
 
 {Diagram here}
 
@@ -331,13 +335,13 @@ For example, consider the natural numbers
         where alg (Zero)   = 0
               alg (Succ k) = k + 1
 
-###  Theorems
+###  4.3 Theorems
 
 By using catamorphism, one of the many forms of structural recursion.
 One of the most pleasant results of using the catamorphism is we can use
 the catalogue of laws\[4\] for free!
 
-####  Fusion
+#### Fusion
 
 Fusion law for catamorphism \[4\] allows a function utilising a
 composition of catamorphism to transformed to a single catamorphism. It
@@ -354,7 +358,7 @@ where,
 
 {example}
 
-####  Composition
+#### Composition
 
 It is not true generally that catamorphisms compose but there is a
 special case. The catamorphism compose law \[4\] states that:
@@ -368,7 +372,7 @@ where,
 
 {example}
 
-####  Banana split theorem
+#### Banana split theorem
 
 Algebras that are over the functor but with different carrier types can be combined
 such that more than one catamorphism can be performed at the same time. This is called
@@ -378,7 +382,7 @@ cata f &&& cata g = cata ( f . fmap fst &&& g . fmap snd )
 
 {example}
 
-### Program Termination
+### 4.4 Program Termination
 
 As we have seen, by using the simplest example of a recursion
 scheme, we have an archive of extremely useful laws that we 
@@ -386,25 +390,26 @@ obtain for free. Another byproduct of using certain recursion
 schemes is that it gives as the ability to reason with the 
 termination of the program.
 
-Using the catamorphism gives us the ability to guarantee its 
-termination. It  will only call the function again on the smaller
+Catamorphism gives us the ability to guarantee its 
+termination. The function calls made are only on smaller
 elements of the inductively defined structure implying it will
-tend towards its base case, giving us termination. In contrast
+tend towards its base case, giving us termination. This is also 
+true for the paramorphism. However,
 with explicit recursion, there is nothing to stop the programmer
 to recursively call the function on larger data type causing it 
-to never terminate. 
+to never terminate, we are unable to reason with its termination.
 
-The property of the guarantee of termination is  exclusive to the 
-paramorphism and catamorphism in the recursion schemes provided
-by Meijer et al. The anamorphism and apomorphism guarantees 
-co-termination. The hylomorphism is an interesting recursion scheme in its own 
+In the recursion schemes provided by Meijer et al., the property to guarantee of termination is  exclusive to the 
+para and catamorphism
+.Conversely, the ana and apomorphism guarantees 
+co-termination - it guarantees it will keep producing data. The hylomorphism is an interesting recursion scheme in its own 
 right, it consists of the composition of cata and anamorphism
-which models general recursion. This is a more powerful model 
-than primitive recursion modelled by the para and catamorphism,
-it also gives us turing completeness thus losing all guarantees of 
+which models general recursion - a more powerful type of recursion 
+than primitive recursion.
+It also gives us turing completeness thus losing all guarantees of 
 termination.
 
-## Conclusion
+## 5 Conclusion
 
 In this report, I have given a brief introduction to category
 theory. Concepts introduced are essential for giving us a
