@@ -96,20 +96,18 @@ The structure of the report is as follows:
 2 Introduction to Category Theory
 ---------------------------------
 
-Category theory is
-a study of mathematical structure infamous for being one of the most abstract theories in mathematics.
-Its generality
-allows it to be applied to many areas of computer science: from
-the design of programming languages to automata theory \[reference
-here?\].
+Category theory is a study of mathematical structure infamous for being
+one of the most abstract theories in mathematics. Its generality allows
+it to be applied to many areas of computer science: from the design of
+programming languages to automata theory \[reference here?\].
 
 A *category* can be thought of as a family of mathematical structures
 coupled with the idea of structure preserving maps. It captures the idea
 composition in its definition which is, arguably, the nature of
 computation. Unsurprisingly, it can be used a model of computation i.e.
-in Haskell, its types and functions can
-be modelled as a *category* called `Hask`, where the types form the objects and
-functions between two types, the morphisms.
+in Haskell, its types and functions can be modelled as a *category*
+called `Hask`, where the types form the objects and functions between
+two types, the morphisms.
 
 But what is a category?\
 A category $C$ is an algebraic structure defined on a collection of:
@@ -121,14 +119,14 @@ additionally, they must satisfy:
 
 -   for each object $A$, there is an identity morphism.
 -   the morphisms are associative.
--   for every object $A, B, C$ a binary operation called the *composition of
-    morphisms*.
+-   for every object $A, B, C$ a binary operation called the
+    *composition of morphisms*.
 
 Morphisms can be thought of as special functions between objects that
-preserves associativity, composition and the
-existence of an identity for every object. Because of this, many
-category theorists believe that the morphisms are of greater importance
-than objects because they reveal the true underlying structure.
+preserves associativity, composition and the existence of an identity
+for every object. Because of this, many category theorists believe that
+the morphisms are of greater importance than objects because they reveal
+the true underlying structure.
 
 It is natural to consider a structure preserving map similar idea to
 morphism but for categories. The functor is a mapping between categories
@@ -148,8 +146,8 @@ These additional laws preserve the nature of a morphism in the category
 by respecting its identity and the composition of morphisms laws.
 
 An endofunctor is a functor from a category to itself. In Haskell, the
-definition of the functor class corresponds to the categorical endofunctor
-defined as:
+definition of the functor class corresponds to the categorical
+endofunctor defined as:
 
       class Functor f where
         fmap :: (a -> b) -> f a -> f b
@@ -161,25 +159,27 @@ must satisfy:
       fmap id = id
       fmap (f . g) = fmap f . fmap g
       
- {more about functors}
+
+{more about functors}
 
 There is one category of particular interest, the category of
 F-algebras.\
-Given a category C and an endofunctor $F: C \rightarrow C$ then an F-algebra is
-a tuple $(A,f)$ where,
+Given a category C and an endofunctor $F: C \rightarrow C$ then an
+F-algebra is a tuple $(A,f)$ where,
 
-* $A$ is an object in $C$ is called the *carrier* of the algebra.
-* $f$ is a morphism $F(A) \rightarrow A$.
+-   $A$ is an object in $C$ is called the *carrier* of the algebra.
+-   $f$ is a morphism $F(A) \rightarrow A$.
 
-F-algebras can be used to represent data structures such as tree and lists.
+F-algebras can be used to represent data structures such as tree and
+lists.
 
-A homomorphism from a F-algebra $(A,a)$ to another F-algebra $(B,b)$ is a
-morphism $C(A,B)$ such that:
+A homomorphism from a F-algebra $(A,a)$ to another F-algebra $(B,b)$ is
+a morphism $C(A,B)$ such that:
 
-* $f \circ a = F(f) \circ b$.
+-   $f \circ a = F(f) \circ b$.
 
-The category of F-algebras constitutes F-algebra being the objects
-and the F-algebra homomorphisms, the morphisms.
+The category of F-algebras constitutes F-algebra being the objects and
+the F-algebra homomorphisms, the morphisms.
 
 In Haskell, the following definition is found in
 `Control.Functor.Algebra` which corresponds to an F-algebra.
@@ -304,26 +304,26 @@ initial algebra, an F-algebra (Fix f, In).
 5 Recursion Schemes
 -------------------
 
-Recursion schemes has risen from attempts to tame the unyielding power of recursion,
-as a results, there is now a large zoo of formalised recursive operators that captures
-different types of recursion. There has been attempts to unify these
-schemes \[citations here\]; interesting in its own right, but outside the scope of this
-paper.
+Recursion schemes has risen from attempts to tame the unyielding power
+of recursion, as a results, there is now a large zoo of formalised
+recursive operators that captures different types of recursion. There
+has been attempts to unify these schemes \[citations here\]; interesting
+in its own right, but outside the scope of this paper.
 
-The nature of denotational semantics can
-be structured as a fold \[1\] which in the zoo of recursion schemes is
-called the catamorphism, It is for this reason, we are interested
-in this particular scheme and it will be the main focus of this section.
-References might be made to other recursive operators to provide the idea
-that these schemes are not restricted to recursion. They can be corecursive,
-the dual of recursion, which generates data. And refolds - combination of
-both recursion and corecursion.
+The nature of denotational semantics can be structured as a fold \[1\]
+which in the zoo of recursion schemes is called the catamorphism, It is
+for this reason, we are interested in this particular scheme and it will
+be the main focus of this section. References might be made to other
+recursive operators to provide the idea that these schemes are not
+restricted to recursion. They can be corecursive, the dual of recursion,
+which generates data. And refolds - combination of both recursion and
+corecursion.
 
 ### 5.1 Catamorphism
 
-Catamorphism are generalisations of folds, it replicates the behaviour of
-iterative functions by destroying the data structure while traversing
-it. 
+Catamorphism are generalisations of folds, it replicates the behaviour
+of iterative functions by destroying the data structure while traversing
+it.
 
 ### 5.2 Derivation
 
@@ -335,58 +335,52 @@ $$
 \end{matrix}
 $$
 
-The catamorphism takes the starting data type in the form the initial algebra
-$(Fix F, in)$ for some endofunctor $F$ which, in this case, is represented by a pattern functor.
-Since it is initial, there exists a unique F-algebra homomorphism to some arbitrary algebra
-$(A, alg)$ in the category of F-algebras for endofunctor $F$. This will be our
+The catamorphism takes the starting data type in the form the initial
+algebra $(Fix F, in)$ for some endofunctor $F$ which, in this case, is
+represented by a pattern functor. Since it is initial, there exists a
+unique F-algebra homomorphism to some arbitrary algebra $(A, alg)$ in
+the category of F-algebras for endofunctor $F$. This will be our
 catamorphism.
 
 This is can be implemented in Haskell as follows:
 
-```
-       cata :: Functor f => Algebra a -> Fix f -> a
-       cata alg = alg . fmap (cata alg) . out
-```
+           cata :: Functor f => Algebra a -> Fix f -> a
+           cata alg = alg . fmap (cata alg) . out
 
 For example, consider the natural numbers
 
-```
-      type Nat = Fix NatF
-      data NatF k = Zero
-                   | Succ k
-                   deriving Functor
+          type Nat = Fix NatF
+          data NatF k = Zero
+                       | Succ k
+                       deriving Functor
 
-      number :: Nat -> Int
-      number = cata alg
-        where alg (Zero)   = 0
-              alg (Succ k) = k + 1
-```
+          number :: Nat -> Int
+          number = cata alg
+            where alg (Zero)   = 0
+                  alg (Succ k) = k + 1
 
 {Explain}
 
 ### 5.3 Theorems
 
 By using catamorphism, one of the many forms of structural recursion,
-one of the most pleasant results is that 
-the catalogue of laws\[4\] can be utilised for free!
+one of the most pleasant results is that the catalogue of laws\[4\] can
+be utilised for free!
 
 #### Fusion
 
 Fusion law for catamorphism \[4\] allows a composition of functions with
-a catamorphism to transformed to a single catamorphism. This will eliminate
-all intermediate data types and is arguable one of the most important laws.
+a catamorphism to transformed to a single catamorphism. This will
+eliminate all intermediate data types and is arguable one of the most
+important laws.
 
-```
-      h . f = g . fmap h => h . cata f = cata g
-```
+          h . f = g . fmap h => h . cata f = cata g
 
 where,
 
-```
-      f :: f a -> a
-      g :: f b -> b
-      h :: a -> b
-```
+          f :: f a -> a
+          g :: f b -> b
+          h :: a -> b
 
 See Appendix. The example given is one of pretty printing functions are
 called "prettyFast" and "prettySlow".
@@ -394,34 +388,29 @@ called "prettyFast" and "prettySlow".
 #### Composition
 
 It is not true generally that catamorphisms compose but there is a
-special case. The compose law \[4\] implies that the number of traversals
-required by a function that satisfies the special case can be reduced which theoretically speeds up performance.
+special case. The compose law \[4\] implies that the number of
+traversals required by a function that satisfies the special case can be
+reduced which theoretically speeds up performance.
 
 It states that:
 
-```
-     cata f . cata (Fix . h) = cata (f . h)
-```
+         cata f . cata (Fix . h) = cata (f . h)
 
 where,
 
-```
-     f :: f a -> a
-     h :: g a -> f a
-```
+         f :: f a -> a
+         h :: g a -> f a
 
 See Appendix.
 
 #### Banana split theorem
 
-Algebras that are over the same functor but with different carrier types can
-be combined. This means that more than one catamorphism can be performed at the
-same time. This is called the banana-split theorem \[4\] which states
-that:
+Algebras that are over the same functor but with different carrier types
+can be combined. This means that more than one catamorphism can be
+performed at the same time. This is called the banana-split theorem
+\[4\] which states that:
 
-```
-cata f &&& cata g = cata ( f . fmap fst &&& g . fmap snd )
-```
+    cata f &&& cata g = cata ( f . fmap fst &&& g . fmap snd )
 
 {example}
 
@@ -442,12 +431,12 @@ terminate, we are unable to reason with its termination.
 
 In the recursion schemes provided by Meijer et al., the property to
 guarantee of termination is exclusive to the para and catamorphism.
-Conversely, the ana and apomorphism guarantees co-termination - it
-will keep producing data. The hylomorphism is an
-interesting recursion scheme in its own right, it consists of the
-composition of cata and anamorphism which captures general recursion - a
-more powerful type of recursion than primitive. It also gives
-us turing completeness thus losing all guarantees of termination.
+Conversely, the ana and apomorphism guarantees co-termination - it will
+keep producing data. The hylomorphism is an interesting recursion scheme
+in its own right, it consists of the composition of cata and anamorphism
+which captures general recursion - a more powerful type of recursion
+than primitive. It also gives us turing completeness thus losing all
+guarantees of termination.
 
 6 Conclusion
 ------------
