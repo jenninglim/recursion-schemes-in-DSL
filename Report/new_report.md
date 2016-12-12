@@ -295,7 +295,7 @@ By using `Fix`, we can define our corresponding pattern functor in such
 a way, called the fixed point of functors, which is isomorphic to the
 original definition,
 
-$Fix ExprF \cong Expr $
+$ Fix ExprF \cong Expr $
 
 This technique of redefining recursive data types is very powerful.
 Interestingly \[4\], the fixed point of functors corresponds to the
