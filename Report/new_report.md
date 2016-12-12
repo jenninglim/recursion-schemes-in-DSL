@@ -32,7 +32,7 @@ for a particular problem domain: it is *domain specific*.
 Domain Specific Languages ("DSL") are, usually declarative, programming
 languages that offer more expressivity over a specific problem domain.
 Their development involves a close analysis of the problem domain such
-that the entire semantics of the problem domain should be captured - no
+that the entire semantics should be captured - no
 more and no less. The nature of these languages implies that they trade
 their generality for focused expressivity. This often makes DSLs small
 languages since only the essential features are captured, examples of
@@ -61,21 +61,21 @@ easier.
 
 The nature of functional languages, especially Haskell, have a strong
 emphasis on maintaining the *purity* of its code. With no state or
-side-effects, many computation are naturally expressed as recursive
+side-effects, many computations are naturally expressed as recursive
 functions. Unsurprisingly, many of which share the same recursive
-patterns which can be abstracted away. An example that many functional
-programmers will be familiar with is *fold* as a standard recursive
-operator, it captures the common pattern of traversing and processing a
-structurally inductive data structure. The abundant usage of folds is so
+pattern which can be abstracted away. An example that many functional
+programmers will be familiar with is *fold*, a standard recursive
+operator that captures the common pattern of traversing and processing a
+structurally inductive data structure. The abundant usage of folds is 
 extensive, in fact, the denotational semantics, an approach that gives
 mathematical models to the semantics of a program, can be structured and
-characterised by folding over its syntax \[1\]. This is why we can fold
-DSL with great success \[2\].
+characterised by folding over its syntax \[1\]. This is why 
+DSL can be folded with great success \[2\].
 
 This motivates us to look closely at the generalisations of folds and
 unfolds as a set of combinators introduced by Meijer et al called
-*recursion schemes*. Category theory was crucial in its development, it
-provided key concepts such as algebras and functors as clean way to
+*recursion schemes*. Category theory is crucial in its development, by
+providing key concepts such as algebras and functors for a clean way to
 formalise the structure of traversing and evaluation of inductive data
 structures.
 
@@ -85,13 +85,14 @@ The structure of the report is as follows:
     originated from category theory and arguably the reason why
     functional programming is so successful. This section introduces the
     necessary knowledge for understanding the report.
-2.  Explicit and Structure Recursion - We will begin by discussing the
-    drawbacks of explicit recursion and why we should always use
-    structured programming if possible.
+2.  Explicit and Structure Recursion - Discussing the
+    drawbacks of explicit recursion and why structured recursion should 
+    always be used if possible.
 3.  Pattern and Fix Point of Functors - Given a recursive data structure
     we will show how to abstract away recursion at the type level.
-4.  Recursion Schemes - The generalised fold. We will discuss its
-    derivation, useful theorems and termination.
+4.  Recursion Schemes - The generalised fold, specifically catamorphisms.
+    This report will show its derivation, theorems and termination 
+    properties.
 
 2 Introduction to Category Theory
 ---------------------------------
@@ -109,8 +110,7 @@ computation i.e. in Haskell, its types and functions can be modelled as
 a *category* called `Hask`, where the types form the objects and
 functions between two types, the morphisms.
 
-But what is a category?\
-A category $C$ is an algebraic structure defined on a collection of:
+Formally, a category $C$ is an algebraic structure defined on a collection of:
 
 -   objects (denoted $A, B, C, ...$)
 -   morphism between a pair $A, B$ denoted $C(A,B)$
@@ -119,8 +119,8 @@ additionally, they must satisfy:
 
 -   for each object $A$, there is an identity morphism.
 -   the morphisms are associative.
--   for every object $A, B, C$ a binary operation called the
-    *composition of morphisms*.
+-   for every object $A, B, C$ its morphisms can be composed called
+    the *composition of morphisms*.
 
 Morphisms can be thought of as special functions between objects that
 preserves associativity, composition and the existence of an identity
@@ -156,13 +156,14 @@ The additional properties that a categoric endofunctor must satisfied is
 captured in Haskell by the functor laws, that each and every instance
 must satisfy:
 
+```
       fmap id = id
       fmap (f . g) = fmap f . fmap g
-      
+```
 
 Functors are hidden and prevalent in functional programming. It captures
 the theme of compatibility between categories of data types and allows
-for function reusability by "promoting" it from type `a -> b` to work
+for function reusability by "promoting" it from type `a -> b` to `f a -> f b`
 over the functor f. The functional programmer can write their code in
 whichever category that is most appropriate and "lift" it with `fmap` to
 be applied to a different category.
@@ -175,16 +176,17 @@ F-algebra is a tuple $(A,f)$ where,
 -   $A$ is an object in $C$ is called the *carrier* of the algebra.
 -   $f$ is a morphism $F(A) \rightarrow A$.
 
-F-algebras can be used to represent data structures such as tree and
-lists.
-
 A homomorphism from a F-algebra $(A,a)$ to another F-algebra $(B,b)$ is
 a morphism $C(A,B)$ such that:
 
 -   $f \circ a = F(f) \circ b$.
 
 The category of F-algebras constitutes F-algebra being the objects and
-the F-algebra homomorphisms, the morphisms.
+the F-algebra homomorphisms, the morphisms. This category is interesting
+to computer scientists because:
+
+- This initial algebra corresponds to the initial data structure.
+- The algebras correspond to the functions performed on the data structure.
 
 In Haskell, the following definition is found in
 `Control.Functor.Algebra` which corresponds to an F-algebra.
@@ -195,6 +197,14 @@ The *initial F-algebra* is an F-algebra where there exists exactly one
 morphism from the initial F-algebra to all other F-algebras. Initial
 algebras are interesting for computer scientist which will be seen in
 Section 4.
+
+It is interesting to see that the category of `Hask` does NOT form a
+category [Citation here]. However, it does not need to perfectly correspond to
+the formal definition of a category for language engineers to use it as a way to provide a way
+to solve practical problems. For example, monads a concept in category theory are used in Haskell as a way to program imperatively: allowing for unsafe IO, state etc.
+As long as our model of computation, a
+category, provided us with intuition and various categorical 
+abstractions as a way to solve prroblems, we should embrace it.
 
 3 Explicit and Structured Recursion
 -----------------------------------
@@ -341,10 +351,11 @@ $$
 
 The catamorphism takes the starting data type in the form the initial
 algebra $(Fix F, in)$ for some endofunctor $F$ which, in this case, is
-represented by a pattern functor. Since it is initial, there exists a
+represented by the pattern functor. Since it is initial, there exists a
 unique F-algebra homomorphism to some arbitrary algebra $(A, alg)$ in
-the category of F-algebras for endofunctor $F$. This will be our
-catamorphism.
+the category of F-algebras for endofunctor $F$. The catamorphism 
+corresponds to the observation function of this homomorphism between
+some algebra and the initial algebra.
 
 This is can be implemented in Haskell as follows:
 
@@ -454,6 +465,10 @@ possible over explicit recursion. Its strength lies in the properties
 that we can imply by using them as well as empowering our ability to
 reason with our code. Thus, I have given what I perceive to be the most
 useful.
+
+Analogy of firing the arrow
+talk about the people 
+talk about the future and the past
 
 References
 ----------
