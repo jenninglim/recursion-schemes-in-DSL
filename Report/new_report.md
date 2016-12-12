@@ -96,20 +96,20 @@ The structure of the report is as follows:
 2 Introduction to Category Theory
 ---------------------------------
 
-Category theory is one of the most abstract theory in mathematics, it is
-a study of mathematical structure. Its abstractness suggests it has more
-form than content which perhaps is one of its strengths, its general
-nature allows it to be applied to many areas of computer science: from
+Category theory is
+a study of mathematical structure infamous for being one of the most abstract theories in mathematics.
+Its generality
+allows it to be applied to many areas of computer science: from
 the design of programming languages to automata theory \[reference
 here?\].
 
-A *category* can be thought of as a family of mathematical structure
+A *category* can be thought of as a family of mathematical structures
 coupled with the idea of structure preserving maps. It captures the idea
 composition in its definition which is, arguably, the nature of
-programming.Unsurprisingly, it can be used a model of computation i.e.
-in Haskell, `Hask` forms a category, where its types and functions can
-be modelled as a *category*, where the types form the objects and
-functions between two types, the morphism.
+computation. Unsurprisingly, it can be used a model of computation i.e.
+in Haskell, its types and functions can
+be modelled as a *category* called `Hask`, where the types form the objects and
+functions between two types, the morphisms.
 
 But what is a category?\
 A category $C$ is an algebraic structure defined on a collection of:
@@ -125,7 +125,7 @@ additionally, they must satisfy:
     morphisms*.
 
 Morphisms can be thought of as special functions between objects that
-preserves its structure satisfying associativity, composition and the
+preserves associativity, composition and the
 existence of an identity for every object. Because of this, many
 category theorists believe that the morphisms are of greater importance
 than objects because they reveal the true underlying structure.
@@ -145,47 +145,49 @@ such that:
 -   $F(g \circ f) = F g \circ F f$
 
 These additional laws preserve the nature of a morphism in the category
-by respecting the identity and the composition of morphisms laws.
+by respecting its identity and the composition of morphisms laws.
 
-An endofunctor is an functor from a category to itself. In Haskell, the
-definition of a functor corresponds with the categorical endofunctor,
-defined as follows:
+An endofunctor is a functor from a category to itself. In Haskell, the
+definition of the functor class corresponds to the categorical endofunctor
+defined as:
 
       class Functor f where
         fmap :: (a -> b) -> f a -> f b
 
-The additional properties that a categoric functor must satisfied, is
+The additional properties that a categoric endofunctor must satisfied is
 captured in Haskell by the functor laws, that each and every instance
 must satisfy:
 
       fmap id = id
       fmap (f . g) = fmap f . fmap g
+      
+ {more about functors}
 
-There is one category of particular useful interest, the category of
+There is one category of particular interest, the category of
 F-algebras.\
 Given a category C and an endofunctor $F: C \rightarrow C$ then an F-algebra is
 a tuple $(A,f)$ where,
 
-* $A$ is an object in $C$
+* $A$ is an object in $C$ is called the *carrier* of the algebra.
 * $f$ is a morphism $F(A) \rightarrow A$.
-
-The object A is called the *carrier* of the algebra.
 
 F-algebras can be used to represent data structures such as tree and lists.
 
-These algebras will form the objects of the category. However, it needs to be
-coupled with morphisms to form a category. In this case, the morphisms is the
-homomorphism between F-algebras.\
-A homomorphism an F-algebra $(A,a)$ to another F-algebra $(B,b)$ is a
-morphism $C(A,B)$ such that $f \circ a = F(f) \circ b$.
+A homomorphism from a F-algebra $(A,a)$ to another F-algebra $(B,b)$ is a
+morphism $C(A,B)$ such that:
 
-In Haskell, the definition following definition is found in
-`Control.Functor.Algebra` to corresponds to the idea of an F-algebra.
+* $f \circ a = F(f) \circ b$.
+
+The category of F-algebras constitutes F-algebra being the objects
+and the F-algebra homomorphisms, the morphisms.
+
+In Haskell, the following definition is found in
+`Control.Functor.Algebra` which corresponds to an F-algebra.
 
       type Algebra f a = f a -> a
 
-The *initial algebra* is an F-algebra where there exists exactly one
-morphism from the initial algebra to all other algebras. Initial
+The *initial F-algebra* is an F-algebra where there exists exactly one
+morphism from the initial F-algebra to all other F-algebras. Initial
 algebras are interesting for computer scientist which will be seen in
 Section 4.
 
