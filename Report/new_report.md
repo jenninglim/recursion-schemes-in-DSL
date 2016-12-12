@@ -104,10 +104,10 @@ programming languages to automata theory \[reference here?\].
 A *category* can be thought of as a family of mathematical structures
 coupled with the idea of structure preserving maps. It captures the idea
 composition in its definition which is, arguably, the nature of
-computation. Unsurprisingly, it can be used a model of computation i.e.
-in Haskell, its types and functions can be modelled as a *category*
-called `Hask`, where the types form the objects and functions between
-two types, the morphisms.
+computation. Unsurprisingly, a category can be used a model of
+computation i.e. in Haskell, its types and functions can be modelled as
+a *category* called `Hask`, where the types form the objects and
+functions between two types, the morphisms.
 
 But what is a category?\
 A category $C$ is an algebraic structure defined on a collection of:
@@ -134,13 +134,13 @@ but with additional properties so that the categorical structure is
 preserved.\
 It is formally, a functor $F : C \rightarrow D$ consists of:
 
--   mapping $A \rightarrow FA: C \rightarrow D$
--   mapping $f \rightarrow F f: C(A,B) \rightarrow D(FA, FB)$
+-   mapping $A \rightarrow F(A): C \rightarrow D$
+-   mapping $f \rightarrow F(f): C(A,B) \rightarrow D(FA, FB)$
 
 such that:
 
 -   $F id = id$
--   $F(g \circ f) = F g \circ F f$
+-   $F(g \circ f) = F(g) \circ F(f)$
 
 These additional laws preserve the nature of a morphism in the category
 by respecting its identity and the composition of morphisms laws.
@@ -160,7 +160,12 @@ must satisfy:
       fmap (f . g) = fmap f . fmap g
       
 
-{more about functors}
+Functors are hidden and prevalent in functional programming. It captures
+the theme of compatibility between categories of data types and allows
+for function reusability by "promoting" it from type `a -> b` to work
+over the functor f. The functional programmer can write their code in
+whichever category that is most appropriate and "lift" it with `fmap` to
+be applied to a different category.
 
 There is one category of particular interest, the category of
 F-algebras.\
@@ -198,9 +203,9 @@ Recursion in its essence is something defined in terms of itself. It is
 a simple yet powerful concept that forms the bread and butter for
 functional computation. Explicit recursion is a way of describing self
 referencing functions that is overused for the uninitiated. Arbitrary
-properties of the explicitly recursive function will need to be written and proved over and
-over again which can be simply avoided by carefully abstracting away
-the recursive patterns.
+properties of the explicitly recursive function will need to be written
+and proved over and over again which can be simply avoided by carefully
+abstracting away the recursive patterns.
 
 Its profuseness implies that by abstracting away common patterns, it
 could replace a plethora of explicit recursive functions. Meijer et al
@@ -211,7 +216,7 @@ introduced its duals for unfolds and corecursion, anamorphism and
 apomorphism. What is surprising perhaps, is that like the folds, unfolds
 can be used to structure and derive a type of program semantics called
 operational semantics \[1\] where the meaning of the program is defined
-in terms of transition functions during program execution. 
+in terms of transition functions during program execution.
 
 We have known for a long time the use of `gotos` in imperative
 programming obscures the structure of the program and reduces the
@@ -219,13 +224,13 @@ programmers ability to reason with their code. For the same reason
 `gotos` should be avoided, we should always use structured recursion
 whenever possible. This is because although explicit is more intuitive,
 structural recursion allows the programmer to reason with the their code
-like never before. There is also catalogue of useful theorems
-and properties which we can infer in our functions for free.
-Additionally, as a byproduct of abstracting away the format of
-traversals, it separates how the function is computed rather than its
-underlying purpose. This means for programmers, trained in the art of
-structuring recursion, can concentrate on what the computation is doing
-rather than how it is done.
+like never before. There is also catalogue of useful theorems and
+properties which we can infer in our functions for free. Additionally,
+as a byproduct of abstracting away the format of traversals, it
+separates how the function is computed rather than its underlying
+purpose. This means for programmers, trained in the art of structuring
+recursion, can concentrate on what the computation is doing rather than
+how it is done.
 
 4 Hiding (explicit) recursion
 -----------------------------
