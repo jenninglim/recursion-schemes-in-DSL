@@ -364,12 +364,12 @@ For example, consider the natural numbers
 ### 5.3 Theorems
 
 By using catamorphism, one of the many forms of structural recursion,
-one of the most pleasant results is that the catalogue of laws\[4\] can
+one of the most pleasant results is that the catalogue of laws\[3\] can
 be utilised for free!
 
 #### Fusion
 
-Fusion law for catamorphism \[4\] allows a composition of functions with
+Fusion law for catamorphism \[3\] allows a composition of functions with
 a catamorphism to transformed to a single catamorphism. This will
 eliminate all intermediate data types and is arguable one of the most
 important laws.
@@ -388,7 +388,7 @@ called "prettyFast" and "prettySlow".
 #### Composition
 
 It is not true generally that catamorphisms compose but there is a
-special case. The compose law \[4\] implies that the number of
+special case. The compose law \[3\] implies that the number of
 traversals required by a function that satisfies the special case can be
 reduced which theoretically speeds up performance.
 
@@ -408,7 +408,7 @@ See Appendix.
 Algebras that are over the same functor but with different carrier types
 can be combined. This means that more than one catamorphism can be
 performed at the same time. This is called the banana-split theorem
-\[4\] which states that:
+\[3\] which states that:
 
     cata f &&& cata g = cata ( f . fmap fst &&& g . fmap snd )
 
