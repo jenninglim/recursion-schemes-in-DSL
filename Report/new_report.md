@@ -198,35 +198,34 @@ Recursion in its essence is something defined in terms of itself. It is
 a simple yet powerful concept that forms the bread and butter for
 functional computation. Explicit recursion is a way of describing self
 referencing functions that is overused for the uninitiated. Arbitrary
-properties of the function will need to be written and proved over and
+properties of the explicitly recursive function will need to be written and proved over and
 over again which can be simply avoided by carefully abstracting away
-common recursive patterns.
+the recursive patterns.
 
 Its profuseness implies that by abstracting away common patterns, it
 could replace a plethora of explicit recursive functions. Meijer et al
 introduced a set of recursive operators that captures different types of
 recursion. The catamorphism models iteration which is a special case of
-primitive recursion which is modelled by the paramorphism. Meijer also
+primitive recursion which is captured by the paramorphism. Meijer also
 introduced its duals for unfolds and corecursion, anamorphism and
 apomorphism. What is surprising perhaps, is that like the folds, unfolds
 can be used to structure and derive a type of program semantics called
 operational semantics \[1\] where the meaning of the program is defined
-in terms of transition functions during program execution. However, this
-lies outside the scope of this report.
+in terms of transition functions during program execution. 
 
 We have known for a long time the use of `gotos` in imperative
 programming obscures the structure of the program and reduces the
 programmers ability to reason with their code. For the same reason
 `gotos` should be avoided, we should always use structured recursion
 whenever possible. This is because although explicit is more intuitive,
-structural recursion provides a way to reason with the programmer's code
-like never before. They provide us with a catalogues of useful theorems
+structural recursion allows the programmer to reason with the their code
+like never before. There is also catalogue of useful theorems
 and properties which we can infer in our functions for free.
 Additionally, as a byproduct of abstracting away the format of
 traversals, it separates how the function is computed rather than its
 underlying purpose. This means for programmers, trained in the art of
 structuring recursion, can concentrate on what the computation is doing
-rather than how.
+rather than how it is done.
 
 4 Hiding (explicit) recursion
 -----------------------------
