@@ -7,7 +7,7 @@ Recursion Scheme in Domain Specific Languages.
 Abstract
 --------
 
-In this report, we will discuss structure recursion as a way to derive
+This report discuss structure recursion as a way to derive
 program semantics. In particular, we are interested in denotational
 semantics which can be structured as a fold. This motivates us to look
 its generalised notion as a recursive operation: the *catamorphism*.
@@ -24,7 +24,7 @@ objects etc.
 
 General Purpose Languages ("GPL") are programming languages designed to
 tackle problems in every problem domain. Their generality pushes
-programmers to adopt them in their repetoire, however this makes them
+programmers to adopt them in their repetoire, however, this makes them
 convoluted to anyone lacking programming expertise. This motivates the
 idea of raising the abstraction level such that languages are designed
 for a particular problem domain: it is *domain specific*.
@@ -32,10 +32,10 @@ for a particular problem domain: it is *domain specific*.
 Domain Specific Languages ("DSL") are, usually declarative, programming
 languages that offer more expressivity over a specific problem domain.
 Their development involves a close analysis of the problem domain such
-that the entire semantics should be captured - no
-more and no less. The nature of these languages implies that they trade
+that its entire semantics should be captured - no
+more and no less. The nature of these languages imply that they trade
 their generality for focused expressivity. This often makes DSLs small
-languages since only the essential features are captured, examples of
+languages since only the essential features are captured. Examples of
 DSLs include SQL, HTML, CSS etc.
 
 There are two main ways of developing DSLs:
@@ -47,15 +47,16 @@ Standalone is a classical approach for implementing a new language. It
 involves implementing the language from scratch: everything that you
 need in a language has to be developed, no concessions are made. Its
 characteristics are tailored specifically to the problem domain.
-However, the drawback to this approach is that it is very costly, as a
-result standalone DSLs are rarely developed.
+However, the drawback to this approach is that it is very costly
+to develop and maintain, as a result standalone DSLs are developed
+when absolutely needed.
 
 Embedded DSLs are implemented by extending a GPL, this approach uses the
 existing language constructs to build the language. They share the
 generic features of the base language thus the embedded DSL offer
-addition power of its base GPL as well as their domain specific
-expressive power. Embedded DSLs often extends functional languages -
-features part of this class of languages such as higher order functions,
+the addition power of its base GPL as well as their domain specific
+expressivity. Embedded DSLs often extends functional languages -
+features that is part of this class of languages such as higher order functions,
 monads, algebraic data types makes the develop of embedded DSL much
 easier.
 
@@ -64,35 +65,36 @@ emphasis on maintaining the *purity* of its code. With no state or
 side-effects, many computations are naturally expressed as recursive
 functions. Unsurprisingly, many of which share the same recursive
 pattern which can be abstracted away. An example that many functional
-programmers will be familiar with is *fold*, a standard recursive
-operator that captures the common pattern of traversing and processing a
+programmers will know and love is *fold* a standard recursive
+operator, it captures the common pattern of traversing and processing a
 structurally inductive data structure. The abundant usage of folds is 
 extensive, in fact, the denotational semantics, an approach that gives
 mathematical models to the semantics of a program, can be structured and
 characterised by folding over its syntax \[1\]. This is why 
 DSL can be folded with great success \[2\].
 
-This motivates us to look closely at the generalisations of folds and
-unfolds as a set of combinators introduced by Meijer et al called
-*recursion schemes*. Category theory is crucial in its development, by
-providing key concepts such as algebras and functors for a clean way to
-formalise the structure of traversing and evaluation of inductive data
-structures.
+This motivates us to look closely at the generalisations of folds
+as a set of combinators introduced by Meijer et al called
+*recursion schemes*. The authors used key concepts from Category theory 
+such as algebras and functors for a clean way to formalise the structure
+of traversing and evaluation of recursive data structures.
 
 The structure of the report is as follows:
 
 1.  A brief introduction to Category Theory - Many ideas in Haskell have
     origins in category theory and arguably the reason why
     functional programming is so successful. This section introduces the
-    necessary knowledge for understanding the report.
+    necessary knowledge for understanding the simple yet elegant derivation
+    of the catamorphism.
 2.  Explicit and Structure Recursion - Discussing the
     drawbacks of explicit recursion and why structured recursion should 
     always be used if possible.
 3.  Pattern and Fix Point of Functors - Given a recursive data structure
-    we will show how to abstract away recursion at the type level.
-4.  Recursion Schemes - The generalised fold, specifically catamorphisms.
-    This report will show its derivation, theorems and termination 
-    properties.
+    the explicit recursion can be abstract away recursion at the type level.
+4.  Recursion Schemes - Since denotational semantics can be characterised by
+    folds, which is captured in the set of recursion schemes as the catamorphisms.
+    This report will show its derivation, theorems.
+5.  Termination Property - ...
 
 2 Introduction to Category Theory
 ---------------------------------
@@ -203,13 +205,12 @@ It is interesting to see that the category of `Hask` does NOT form a
 category [Citation here]. However, it does not need to perfectly correspond to
 the formal definition of a category for language engineers to use it as a way
 to solve practical problems. For example, monads a concept in category theory are used in Haskell as a way to program imperatively: allowing for unsafe IO, state etc.
-As long as our model of computation, a
-category, provided us with intuition and various categorical 
-abstractions as a way to solve problems, we should embrace it.
+As long as the model of computation, a
+category, provides intuition and various categorical 
+abstractions as a way to solve problems, it should be embraced.
 
 3 Recursion
 -----------------------------------
-### 3.1 Structured and Explicit
 
 Recursion in its essence is something defined in terms of itself. It is
 a simple yet powerful concept that forms the bread and butter for
@@ -236,27 +237,18 @@ programmers ability to reason with their code. For the same reason
 `gotos` should be avoided, we should always use structured recursion
 whenever possible. This is because although explicit is more intuitive,
 structural recursion allows the programmer to reason with the their code
-like never before. There is also catalogue of useful theorems and
-properties which we can infer in our functions for free. Additionally,
-as a byproduct of abstracting away the format of traversals, it
-separates how the function is computed rather than its underlying
+like never before. In addition, there is a catalogue of useful theorems and
+laws which we can use to improve the functions utilising structural recursion for free. Additionally,
+as a byproduct of abstracting away the recursive patterns, it
+separates how the function is computed from its underlying
 purpose. This means for programmers, trained in the art of structuring
 recursion, can concentrate on what the computation is doing rather than
 how it is done.
 
-### 3.2 Primitive and General
-
-There are different types of recursion.
-
 4 Hiding (explicit) recursion
 -----------------------------
 
-In Section 3, we have detailed the differences between explicit and
-structured recursion and explained that whenever there is a choice
-between structured and explicit recursion, structured recursion should
-always be used.
-
-This section, we will give the steps for abstracting away recursive
+This section will focus on the steps for abstracting away recursive
 algebraic data types at its type level by using the concept of a fixed
 point.
 
