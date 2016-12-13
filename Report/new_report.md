@@ -170,7 +170,7 @@ over the functor f. The functional programmer can write their code in
 whichever category that is most appropriate and "lift" it with `fmap` to
 be applied to a different category.
 
-There is one category of particular interest, the category of
+There is one category of particular interest - the category of
 F-algebras.\
 Given a category C and an endofunctor $F: C \rightarrow C$ then an
 F-algebra is a tuple $(A,f)$ where,
@@ -183,13 +183,21 @@ a morphism $C(A,B)$ such that:
 
 -   $f \circ a = F(f) \circ b$.
 
-The category of F-algebras constitutes F-algebra being the objects and
-the F-algebra homomorphisms, the morphisms. This category is interesting
-to computer scientists because:
+$$
+\begin{matrix}
+  & F (A) & \underset{f}{{\to} & A \\
+  F (f) & \downarrow& &\ \downarrow& cata \circ f\\
+  & F(B) &\underset{f'}{\to} & B
+\end{matrix}
+$$
 
-- This initial algebra corresponds to the initial data structure.
-- The algebras correspond to the functions performed on the data structure.
-- The category corresponds to the way of transforming our data structure.
+The category of F-algebras constitutes F-algebra being the objects and
+the F-algebra homomorphisms, the morphisms.
+This category is interesting
+to computer scientists because the category can be used to model how the data structure
+can be transformed. The initial algebra of the category corresponds to our
+initial data structure and the algebras corresponds to the function that
+can be performed on the data structure.
 
 In Haskell, the following definition is found in
 `Control.Functor.Algebra` which corresponds to an F-algebra.
