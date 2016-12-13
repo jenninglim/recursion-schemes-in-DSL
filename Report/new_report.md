@@ -7,10 +7,10 @@ Recursion Scheme in Domain Specific Languages.
 Abstract
 --------
 
-This report discuss structure recursion as a way to derive
-program semantics. In particular, we are interested in denotational
-semantics which can be structured as a fold. This motivates us to look
-its generalised notion as a recursive operation: the *catamorphism*.
+This report discuss structure recursion as a way to derive program
+semantics. In particular, we are interested in denotational semantics
+which can be structured as a fold. This motivates us to look its
+generalised notion as a recursive operation: the *catamorphism*.
 
 1 Introduction
 --------------
@@ -32,11 +32,11 @@ for a particular problem domain: it is *domain specific*.
 Domain Specific Languages ("DSL") are, usually declarative, programming
 languages that offer more expressivity over a specific problem domain.
 Their development involves a close analysis of the problem domain such
-that its entire semantics should be captured - no
-more and no less. The nature of these languages imply that they trade
-their generality for focused expressivity. This often makes DSLs small
-languages since only the essential features are captured. Examples of
-DSLs include SQL, HTML, CSS etc.
+that its entire semantics should be captured - no more and no less. The
+nature of these languages imply that they trade their generality for
+focused expressivity. This often makes DSLs small languages since only
+the essential features are captured. Examples of DSLs include SQL, HTML,
+CSS etc.
 
 There are two main ways of developing DSLs:
 
@@ -47,62 +47,64 @@ Standalone is a classical approach for implementing a new language. It
 involves implementing the language from scratch: everything that you
 need in a language has to be developed, no concessions are made. Its
 characteristics are tailored specifically to the problem domain.
-However, the drawback to this approach is that it is very costly
-to develop and maintain, as a result standalone DSLs are developed
-when absolutely needed.
+However, the drawback to this approach is that it is very costly to
+develop and maintain, as a result standalone DSLs are developed when
+absolutely needed.
 
 Embedded DSLs are implemented by extending a GPL, this approach uses the
 existing language constructs to build the language. They share the
-generic features of the base language thus the embedded DSL offer
-the addition power of its base GPL as well as their domain specific
+generic features of the base language thus the embedded DSL offer the
+addition power of its base GPL as well as their domain specific
 expressivity. Embedded DSLs often extends functional languages -
-features that is part of this class of languages such as higher order functions,
-monads, algebraic data types makes the develop of embedded DSL much
-easier.
+features that is part of this class of languages such as higher order
+functions, monads, algebraic data types makes the develop of embedded
+DSL much easier.
 
 The nature of functional languages, especially Haskell, have a strong
 emphasis on maintaining the *purity* of its code. With no state or
 side-effects, many computations are naturally expressed as recursive
 functions. Unsurprisingly, many of which share the same recursive
 pattern which can be abstracted away. An example that many functional
-programmers will know and love is *fold* a standard recursive
-operator, it captures the common pattern of traversing and processing a
-structurally inductive data structure. The abundant usage of folds is 
+programmers will know and love is *fold* a standard recursive operator,
+it captures the common pattern of traversing and processing a
+structurally inductive data structure. The abundant usage of folds is
 extensive, in fact, the denotational semantics, an approach that gives
 mathematical models to the semantics of a program, can be structured and
-characterised by folding over its syntax \[1\]. This is why 
-DSL can be folded with great success \[2\].
+characterised by folding over its syntax \[1\]. This is why DSL can be
+folded with great success \[2\].
 
-This motivates us to look closely at the generalisations of folds
-as a set of combinators introduced by Meijer et al called
-*recursion schemes*. The authors used key concepts from Category theory 
-such as algebras and functors for a clean way to formalise the structure
-of traversing and evaluation of recursive data structures.
+This motivates us to look closely at the generalisations of folds as a
+set of combinators introduced by Meijer et al called *recursion
+schemes*. The authors used key concepts from Category theory such as
+algebras and functors for a clean way to formalise the structure of
+traversing and evaluation of recursive data structures.
 
 The structure of the report is as follows:
 
 1.  A brief introduction to Category Theory - Many ideas in Haskell have
-    origins in category theory and arguably the reason why
-    functional programming is so successful. This section introduces the
-    necessary knowledge for understanding the simple yet elegant derivation
-    of the catamorphism.
-2.  Explicit and Structure Recursion - Discussing the
-    drawbacks of explicit recursion and why structured recursion should 
-    always be used if possible.
+    origins in category theory and arguably the reason why functional
+    programming is so successful. This section introduces the necessary
+    knowledge for understanding the simple yet elegant derivation of the
+    catamorphism.
+2.  Explicit and Structure Recursion - Discussing the drawbacks of
+    explicit recursion and why structured recursion should always be
+    used if possible.
 3.  Pattern and Fix Point of Functors - Given a recursive data structure
-    the explicit recursion can be abstract away recursion at the type level.
-4.  Recursion Schemes - Since denotational semantics can be characterised by
-    folds, which is captured in the set of recursion schemes as the catamorphisms.
-    This report will show its derivation, theorems.
+    the explicit recursion can be abstract away recursion at the type
+    level.
+4.  Recursion Schemes - Since denotational semantics can be
+    characterised by    folds, which is captured in the set of recursion
+    schemes as the catamorphisms. This report will show its derivation,
+    theorems.
 5.  Termination Property - ...
 
 2 Introduction to Category Theory
 ---------------------------------
 
-Category theory is a study of mathematical structure infamous for being
-one of the most abstract theories in mathematics. Its generality allows
-it to be applied to many areas of computer science: from the design of
-programming languages to automata theory \[reference here?\].
+Category theory is the study of mathematical structure infamous for
+being one of the most abstract theories in mathematics. Its generality
+allows it to be applied to many areas of computer science: from the
+design of programming languages to automata theory \[reference here?\].
 
 A *category* can be thought of as a family of mathematical structures
 coupled with the idea of structure preserving maps. It captures the idea
@@ -112,7 +114,8 @@ computation i.e. in Haskell, its types and functions can be modelled as
 a *category* called `Hask`, where the types form the objects and
 functions between two types, the morphisms.
 
-Formally, a category $C$ is an algebraic structure defined on a collection of:
+Formally, a category $C$ is an algebraic structure defined on a
+collection of:
 
 -   objects (denoted $A, B, C, ...$)
 -   morphism between a pair $A, B$ denoted $C(A,B)$
@@ -121,8 +124,8 @@ additionally, they must satisfy:
 
 -   for each object $A$, there is an identity morphism.
 -   the morphisms are associative.
--   for every object $A, B, C$ its morphisms can be composed called
-    the *composition of morphisms*.
+-   for every object $A, B, C$ its morphisms can be composed called the
+    *composition of morphisms*.
 
 Morphisms can be thought of as special functions between objects that
 preserves associativity, composition and the existence of an identity
@@ -133,7 +136,8 @@ the true underlying structure.
 It is natural to consider a structure preserving map similar idea to
 morphism but for categories. The functor is a mapping between categories
 but with additional properties so that the categorical structure is
-preserved.\
+preserved.
+
 It is formally, a functor $F : C \rightarrow D$ consists of:
 
 -   mapping $A \rightarrow F(A): C \rightarrow D$
@@ -147,9 +151,9 @@ such that:
 These additional laws preserve the nature of a morphism in the category
 by respecting its identity and the composition of morphisms laws.
 
-An endofunctor is a functor from a category to itself. In Haskell, the
-definition of the functor class corresponds to the categorical
-endofunctor defined as:
+In Haskell, the definition of the functor class corresponds to the
+categorical endofunctor which is a functor from a category to itself.
+The functor class is defined as follows:
 
       class Functor f where
         fmap :: (a -> b) -> f a -> f b
@@ -158,17 +162,15 @@ The additional properties that a categoric endofunctor must satisfied is
 captured in Haskell by the functor laws, that each and every instance
 must satisfy:
 
-```
-      fmap id = id
-      fmap (f . g) = fmap f . fmap g
-```
+          fmap id = id
+          fmap (f . g) = fmap f . fmap g
 
 Functors are hidden and prevalent in functional programming. It captures
 the theme of compatibility between categories of data types and allows
-for function reusability by "promoting" it from type `a -> b` to `f a -> f b`
-over the functor f. The functional programmer can write their code in
-whichever category that is most appropriate and "lift" it with `fmap` to
-be applied to a different category.
+for function reusability by "promoting" it from type `a -> b` to
+`f a -> f b` over the functor instance `f`. The functional programmer
+can write their code in whichever category that is most appropriate and
+"lift" it with `fmap` to be applied to a different category.
 
 There is one category of particular interest - the category of
 F-algebras.\
@@ -178,47 +180,47 @@ F-algebra is a tuple $(A,f)$ where,
 -   $A$ is an object in $C$ is called the *carrier* of the algebra.
 -   $f$ is a morphism $F(A) \rightarrow A$.
 
-A homomorphism from a F-algebra $(A,a)$ to another F-algebra $(B,b)$ is
-a morphism $C(A,B)$ such that:
+A homomorphism from a F-algebra $(A,\alpha)$ to another F-algebra
+$(B,\beta)$ is a morphism $C(A,B)$ such that:
 
 -   $f \circ a = F(f) \circ b$.
 
 $$
 \begin{matrix}
-  & F (A) & \underset{f}{{\to} & A \\
-  F (f) & \downarrow& &\ \downarrow& cata \circ f\\
-  & F(B) &\underset{f'}{\to} & B
+  & F(A) &\underset{\alpha}{\to} &\ A \\
+  F (f) &\downarrow& &\ \downarrow& f\\
+  & F(B) &\underset{\beta}{\to} &\ B \\
 \end{matrix}
 $$
-
-The category of F-algebras constitutes F-algebra being the objects and
-the F-algebra homomorphisms, the morphisms.
-This category is interesting
-to computer scientists because the category can be used to model how the data structure
-can be transformed. The initial algebra of the category corresponds to our
-initial data structure and the algebras corresponds to the function that
-can be performed on the data structure.
 
 In Haskell, the following definition is found in
 `Control.Functor.Algebra` which corresponds to an F-algebra.
 
       type Algebra f a = f a -> a
 
-The *initial F-algebra* is an F-algebra where there exists exactly one
+The F-algebra is an *initial F-algebra* when there exists exactly one
 morphism from the initial F-algebra to all other F-algebras. Initial
-algebras are interesting for computer scientist which will be seen in
-Section 4.
+algebras is an interesting concept which can be used to model our data
+type.
+
+The category of F-algebras constitutes F-algebra as objects and the
+F-algebra homomorphisms, the morphisms. The category can be used to
+model how the data structure i.e. lists or trees can be transformed. The
+initial algebra of the category corresponds to our initial data
+structure and the algebras corresponds to the function that can be
+performed on the data structure.
 
 It is interesting to see that the category of `Hask` does NOT form a
-category [Citation here]. However, it does not need to perfectly correspond to
-the formal definition of a category for language engineers to use it as a way
-to solve practical problems. For example, monads a concept in category theory are used in Haskell as a way to program imperatively: allowing for unsafe IO, state etc.
-As long as the model of computation, a
-category, provides intuition and various categorical 
+category \[Citation here\]. However, it does not need to perfectly
+correspond to the formal definition of a category for language engineers
+to use it as a way to solve practical problems. For example, monads, a
+concept in category theory, is used in Haskell as a way to program
+imperatively: allowing for unsafe IO, state etc. As long as the model of
+computation, a category, provides intuition and various categorical
 abstractions as a way to solve problems, it should be embraced.
 
 3 Recursion
------------------------------------
+-----------
 
 Recursion in its essence is something defined in terms of itself. It is
 a simple yet powerful concept that forms the bread and butter for
@@ -245,13 +247,13 @@ programmers ability to reason with their code. For the same reason
 `gotos` should be avoided, we should always use structured recursion
 whenever possible. This is because although explicit is more intuitive,
 structural recursion allows the programmer to reason with the their code
-like never before. In addition, there is a catalogue of useful theorems and
-laws which we can use to improve the functions utilising structural recursion for free. Additionally,
-as a byproduct of abstracting away the recursive patterns, it
-separates how the function is computed from its underlying
-purpose. This means for programmers, trained in the art of structuring
-recursion, can concentrate on what the computation is doing rather than
-how it is done.
+like never before. In addition, there is a catalogue of useful theorems
+and laws which we can use to improve the functions utilising structural
+recursion for free. Additionally, as a byproduct of abstracting away the
+recursive patterns, it separates how the function is computed from its
+underlying purpose. This means for programmers, trained in the art of
+structuring recursion, can concentrate on what the computation is doing
+rather than how it is done.
 
 4 Hiding (explicit) recursion
 -----------------------------
@@ -349,9 +351,9 @@ it.
 
 $$
 \begin{matrix}
-  & F (Fix F)& \to & Fix F \\
+  & F(Fix F) & \underset{In}{\to} & Fix F \\
   fmap(cata \circ alg) & \downarrow& &\ \downarrow& cata \circ alg\\
-  & F(A) &\underset{alg}{\to} & A
+  & F(A) & \underset{alg}{\to} & A
 \end{matrix}
 $$
 
@@ -359,7 +361,7 @@ The catamorphism takes the starting data type in the form the initial
 algebra $(Fix F, in)$ for some endofunctor $F$ which, in this case, is
 represented by the pattern functor. Since it is initial, there exists a
 unique F-algebra homomorphism to some arbitrary algebra $(A, alg)$ in
-the category of F-algebras for endofunctor $F$. The catamorphism 
+the category of F-algebras for endofunctor $F$. The catamorphism
 corresponds to the observation function of this homomorphism between
 some algebra and the initial algebra.
 
@@ -380,9 +382,10 @@ For example, consider the natural numbers
             where alg (Zero)   = 0
                   alg (Succ k) = k + 1
 
-In the `number` function, Nat corresponds to the initial algebra, to be transformed
-by the algebra which in this case is defined within the 
-scope of the function.
+In the `number` function, Nat corresponds to the initial algebra, to be
+transformed by the algebra which in this case is defined within the
+scope of the function. Notice that this method of deriving the function
+has no explicit recursion.
 
 ### 5.3 Theorems
 
@@ -424,26 +427,24 @@ where,
          f :: f a -> a
          h :: g a -> f a
 
-This theorem can be used to optimise code.
-See Appendix.
+This theorem can be used to optimise code. See Appendix.
 
 #### Banana split theorem
 
 Algebras that are over the same functor but with different carrier types
 can be combined. This means that more than one catamorphism can be
 performed at the same time. This is called the banana-split theorem
-\[3\] which states that: 
+\[3\] which states that:
 
-```
-    cata f &&& cata g = cata ( f . fmap fst &&& g . fmap snd )
-    
-    (&&&) :: (a -> b) -> (a -> c) -> (a -> (b , c))
-    f &&& g = \x -> (f x, g x)
-```
+        cata f &&& cata g = cata ( f . fmap fst &&& g . fmap snd )
+        
+        (&&&) :: (a -> b) -> (a -> c) -> (a -> (b , c))
+        f &&& g = \x -> (f x, g x)
 
 {example}
 
-### 4.4 Program Termination
+5 Program Termination
+---------------------
 
 As we have seen, by using the simplest example of a recursion scheme, we
 have an archive of extremely useful laws that we obtain for free.
@@ -480,9 +481,8 @@ that we can imply by using them as well as empowering our ability to
 reason with our code. Thus, I have given what I perceive to be the most
 useful.
 
-Analogy of firing the arrow
-talk about the people 
-talk about the future and the past
+Analogy of firing the arrow talk about the people talk about the future
+and the past
 
 References
 ----------
