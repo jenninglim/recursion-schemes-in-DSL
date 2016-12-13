@@ -7,7 +7,7 @@ Recursion Scheme in Domain Specific Languages.
 Abstract
 --------
 
-In this paper we will introduce structure recursion as a way to derive
+In this report, we will discuss structure recursion as a way to derive
 program semantics. In particular, we are interested in denotational
 semantics which can be structured as a fold. This motivates us to look
 its generalised notion as a recursive operation: the *catamorphism*.
@@ -82,7 +82,7 @@ structures.
 The structure of the report is as follows:
 
 1.  A brief introduction to Category Theory - Many ideas in Haskell have
-    originated from category theory and arguably the reason why
+    origins in category theory and arguably the reason why
     functional programming is so successful. This section introduces the
     necessary knowledge for understanding the report.
 2.  Explicit and Structure Recursion - Discussing the
@@ -187,6 +187,7 @@ to computer scientists because:
 
 - This initial algebra corresponds to the initial data structure.
 - The algebras correspond to the functions performed on the data structure.
+- The category corresponds to the way of transforming our data structure.
 
 In Haskell, the following definition is found in
 `Control.Functor.Algebra` which corresponds to an F-algebra.
@@ -200,14 +201,15 @@ Section 4.
 
 It is interesting to see that the category of `Hask` does NOT form a
 category [Citation here]. However, it does not need to perfectly correspond to
-the formal definition of a category for language engineers to use it as a way to provide a way
+the formal definition of a category for language engineers to use it as a way
 to solve practical problems. For example, monads a concept in category theory are used in Haskell as a way to program imperatively: allowing for unsafe IO, state etc.
 As long as our model of computation, a
 category, provided us with intuition and various categorical 
-abstractions as a way to solve prroblems, we should embrace it.
+abstractions as a way to solve problems, we should embrace it.
 
-3 Explicit and Structured Recursion
+3 Recursion
 -----------------------------------
+### 3.1 Structured and Explicit
 
 Recursion in its essence is something defined in terms of itself. It is
 a simple yet powerful concept that forms the bread and butter for
@@ -241,6 +243,10 @@ separates how the function is computed rather than its underlying
 purpose. This means for programmers, trained in the art of structuring
 recursion, can concentrate on what the computation is doing rather than
 how it is done.
+
+### 3.2 Primitive and General
+
+There are different types of recursion.
 
 4 Hiding (explicit) recursion
 -----------------------------
@@ -374,7 +380,9 @@ For example, consider the natural numbers
             where alg (Zero)   = 0
                   alg (Succ k) = k + 1
 
-{Explain}
+In the `number` function, Nat corresponds to the initial algebra, to be transformed
+by the algebra which in this case is defined within the 
+scope of the function.
 
 ### 5.3 Theorems
 
@@ -416,6 +424,7 @@ where,
          f :: f a -> a
          h :: g a -> f a
 
+This theorem can be used to optimise code.
 See Appendix.
 
 #### Banana split theorem
@@ -423,9 +432,14 @@ See Appendix.
 Algebras that are over the same functor but with different carrier types
 can be combined. This means that more than one catamorphism can be
 performed at the same time. This is called the banana-split theorem
-\[3\] which states that:
+\[3\] which states that: 
 
+```
     cata f &&& cata g = cata ( f . fmap fst &&& g . fmap snd )
+    
+    (&&&) :: (a -> b) -> (a -> c) -> (a -> (b , c))
+    f &&& g = \x -> (f x, g x)
+```
 
 {example}
 
