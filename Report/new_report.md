@@ -8,9 +8,9 @@ Abstract
 --------
 
 This report discusses structured recursion as a way to derive program
-semantics. In particular, the denotational semantics
-which can be structured as a fold motivates a close examination of its
-generalised notion as a recursive operation: the *catamorphism*.
+semantics. In particular, the denotational semantics which can be
+structured as a fold motivates a close examination of its generalised
+notion as a recursive operation: the *catamorphism*.
 
 1 Introduction
 --------------
@@ -226,34 +226,35 @@ Recursion in its essence is something defined in terms of itself. It is
 a simple yet powerful concept that forms the bread and butter for
 functional computation. Explicit recursion is a way of describing self
 referencing functions that is overused for the uninitiated. Arbitrary
-properties of the explicitly recursive function will need to be theorised
-and proved over and over again which can be simply avoided by carefully
-abstracting away the common recursive patterns.
+properties of the explicitly recursive function will need to be
+theorised and proved over and over again which can be simply avoided by
+carefully abstracting away the common recursive patterns.
 
 Its profuseness implies that by abstracting away common patterns, it
 could replace a plethora of explicit recursive functions. Meijer et al
 introduced a set of combinators that captures different types of
-recursion. The catamorphism captures the concept of iteration - a special case of
-primitive recursion which is captured by the paramorphism. Meijer also
-introduced its duals for unfolds and corecursion - anamorphism and
-apomorphism. What is surprising perhaps, is that like the folds, unfolds
-can be used to structure and derive a type of program semantics called
-operational semantics \[1\] where the meaning of the program is defined
-in terms of transition functions during program execution.
+recursion. The catamorphism captures the concept of iteration - a
+special case of primitive recursion which is captured by the
+paramorphism. Meijer also introduced its duals for unfolds and
+corecursion - anamorphism and apomorphism. What is surprising perhaps,
+is that like the folds, unfolds can be used to structure and derive a
+type of program semantics called operational semantics \[1\] where the
+meaning of the program is defined in terms of transition functions
+during program execution.
 
 It has been known for a long time the use of `gotos` in imperative
 programming obscures the structure of the program and reduces the
-programmers ability to reason with their code[citation]. For the same reason
-`gotos` should be avoided, we should always use structured recursion
-whenever possible. This is because although explicit is more intuitive,
-structural recursion allows the programmer to reason with the their code
-like never before. In addition, there is a catalogue of useful theorems
-and laws which can used to improve each function that utilises structural
-recursion for free. Moreover, as a byproduct of abstracting away the
-recursive patterns, it separates how the function is computed from its
-underlying purpose. This means for programmers, trained in the art of
-structuring recursion, can concentrate on what the computation is doing
-rather than how it is done.
+programmers ability to reason with their code\[citation\]. For the same
+reason `gotos` should be avoided, we should always use structured
+recursion whenever possible. This is because although explicit is more
+intuitive, structural recursion allows the programmer to reason with the
+their code like never before. In addition, there is a catalogue of
+useful theorems and laws which can used to improve each function that
+utilises structural recursion for free. Moreover, as a byproduct of
+abstracting away the recursive patterns, it separates how the function
+is computed from its underlying purpose. This means for programmers,
+trained in the art of structuring recursion, can concentrate on what the
+computation is doing rather than how it is done.
 
 4 Hiding (explicit) recursion
 -----------------------------
@@ -270,8 +271,8 @@ Let’s consider a very simple language of addition and subtraction.
               | Add Expr Expr
               | Sub Expr Expr
 
-The recursive spot in `Expr` can be parameterised with `x` producing
-a near identical data type:
+The recursive spot in `Expr` can be parameterised with `x` producing a
+near identical data type:
 
     data ExprF x = Val Int
                  | Add x x
@@ -314,7 +315,7 @@ This concept can be defined in Haskell's type definition as follows:
     newtype Fix f = In { out :: f (Fix f) }
 
 By using `Fix`, we can define our corresponding pattern functor in such
-a way, called the _fixed point of functors_, which is isomorphic to the
+a way, called the *fixed point of functors*, which is isomorphic to the
 original definition,
 
 $$ Fix ExprF \cong Expr $$
@@ -331,14 +332,14 @@ of recursion, as a results, there is now a large zoo of formalised
 recursive operators that captures different types of recursion. There
 has been attempts to unify these schemes \[citations here\].
 
-Denotational semantics can be structured as a fold \[1\]
-which in the zoo of recursion schemes is called the catamorphism.
-It motivates a close examination of this particular scheme and it will
-be the main focus of this section. References might be made to other
-recursive operators to provide the idea that these schemes are not limited
-to recursion. They can be corecursive, the dual of recursion,
-which generates data. And refolds which uses a combination of both recursion and
-corecursion.
+Denotational semantics can be structured as a fold \[1\] which in the
+zoo of recursion schemes is called the catamorphism. It motivates a
+close examination of this particular scheme and it will be the main
+focus of this section. References might be made to other recursive
+operators to provide the idea that these schemes are not limited to
+recursion. They can be corecursive, the dual of recursion, which
+generates data. And refolds which uses a combination of both recursion
+and corecursion.
 
 ### 5.1 Catamorphism
 
@@ -381,8 +382,8 @@ For example, consider the natural numbers
             where alg (Zero)   = 0
                   alg (Succ k) = k + 1
 
-In the `number` function, `Nat` corresponds to the initial algebra, to be
-transformed by the algebra which in this case is defined within the
+In the `number` function, `Nat` corresponds to the initial algebra, to
+be transformed by the algebra which in this case is defined within the
 scope of the function. Notice that this method of defining the function
 has no explicit recursion.
 
@@ -445,15 +446,15 @@ See appendix.
 5 Program Termination
 ---------------------
 
-As we have seen, by using the simplest example of the recursion schemes, we
-have an archive of extremely useful laws that is obtained for free.
+As we have seen, by using the simplest example of the recursion schemes,
+we have an archive of extremely useful laws that is obtained for free.
 Another byproduct of using certain recursion schemes is that it gives us
 the ability to reason with the termination of the program.
 
 Catamorphism gives us the ability to guarantee its termination. The
 function calls are made only on smaller elements of the inductively
-defined structure implying it will tend towards its base case, giving program
-termination. This is also true for the paramorphism. With
+defined structure implying it will tend towards its base case, giving
+program termination. This is also true for the paramorphism. With
 explicit recursion, there is nothing to stop the programmer to
 recursively call the function on larger data type causing it to never
 terminate.
@@ -474,17 +475,17 @@ Structure
 
 Looking back
 
-* Category as a model of computation
-* Meijer et al work.
-* other recursion schemes introduced for other types of recursion.
-* unification of recursion schemes.
+-   Category as a model of computation
+-   Meijer et al work.
+-   other recursion schemes introduced for other types of recursion.
+-   unification of recursion schemes.
 
 Looking forward
 
-* unification of recursion schemes?
-* unfolds less used perhaps should be used more.
-* ???
-* 
+-   unification of recursion schemes?
+-   unfolds less used perhaps should be used more.
+-   ???
+-   
 
 References
 ----------
