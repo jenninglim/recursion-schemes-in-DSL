@@ -93,7 +93,7 @@ The structure of the report is as follows:
     the explicit recursion can be abstract away recursion at the type
     level.
 4.  Recursion Schemes - Since denotational semantics can be
-    characterised by    folds, which is captured in the set of recursion
+    characterised by folds, which is captured in the set of recursion
     schemes as the catamorphisms. This report will show its derivation,
     theorems.
 5.  Termination Property - ...
@@ -308,7 +308,7 @@ However, by using the paradoxical Y combinator, we can replicate
 recursive behaviour. It is, by definition, a higher-order function, f,
 that takes a non-recursive function that satisfies the following:
 
-$$y f = f (y  f) \forall f$$
+$$y f = \forall f : f (y  f) $$
 
 This concept can be defined in Haskell's type definition as follows:
 
@@ -352,18 +352,18 @@ it.
 $$
 \begin{matrix}
   & F(Fix F) & \underset{In}{\to} & Fix F \\
-  fmap(cata \circ alg) & \downarrow& &\ \downarrow& cata \circ alg\\
+  fmap(cata alg) & \downarrow& &\ \downarrow& cata alg\\
   & F(A) & \underset{alg}{\to} & A
 \end{matrix}
 $$
 
-The catamorphism takes the starting data type in the form the initial
-algebra $(Fix F, in)$ for some endofunctor $F$ which, in this case, is
-represented by the pattern functor. Since it is initial, there exists a
+The catamorphism takes the data type in the form the initial
+algebra $(Fix F, in)$ for some endofunctor $F$ which
+represents the pattern functor. Since it is initial, there exists a
 unique F-algebra homomorphism to some arbitrary algebra $(A, alg)$ in
-the category of F-algebras for pattern functor $F$. The catamorphism
-corresponds to the observation function of this homomorphism between
-some algebra and the initial algebra.
+the category of F-algebras for the pattern functor $F$. The catamorphism
+corresponds to the observation of this homomorphism from
+the initial algebra to some algebra.
 
 This is can be implemented in Haskell as follows:
 
