@@ -241,7 +241,7 @@ can be used to structure and derive a type of program semantics called
 operational semantics \[1\] where the meaning of the program is defined
 in terms of transition functions during program execution.
 
-We have known for a long time the use of `gotos` in imperative
+It has been known for a long time the use of `gotos` in imperative
 programming obscures the structure of the program and reduces the
 programmers ability to reason with their code. For the same reason
 `gotos` should be avoided, we should always use structured recursion
