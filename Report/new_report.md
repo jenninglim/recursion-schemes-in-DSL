@@ -220,7 +220,7 @@ computation, a category, provides intuition and various categorical
 abstractions as a way to solve problems, it should be embraced.
 
 3 Explicit and Structured Recursion
------------
+-----------------------------------
 
 Recursion in its essence is something defined in terms of itself. It is
 a simple yet powerful concept that forms the bread and butter for
@@ -357,13 +357,13 @@ $$
 \end{matrix}
 $$
 
-The catamorphism takes the data type in the form the initial
-algebra $(Fix F, in)$ for some endofunctor $F$ which
-represents the pattern functor. Since it is initial, there exists a
-unique F-algebra homomorphism to some arbitrary algebra $(A, alg)$ in
-the category of F-algebras for the pattern functor $F$. The catamorphism
-corresponds to the observation of this homomorphism from
-the initial algebra to some algebra.
+The catamorphism takes the data type in the form the initial algebra
+$(Fix F, in)$ for some endofunctor $F$ which represents the pattern
+functor. Since it is initial, there exists a unique F-algebra
+homomorphism to some arbitrary algebra $(A, alg)$ in the category of
+F-algebras for the pattern functor $F$. The catamorphism corresponds to
+the observation of this homomorphism from the initial algebra to some
+algebra.
 
 This is can be implemented in Haskell as follows:
 
@@ -462,34 +462,34 @@ terminate.
 In the recursion schemes provided by Meijer et al., the property to
 guarantee termination is exclusive to the para and catamorphism.
 Conversely, the ana and apomorphism guarantees co-termination - it will
-keep producing data. 
+keep producing data.
 
 6 Conclusion
 ------------
 
-The purpose of this report was to show a in depth analysis of the catamorphism as an
-example from the set of recursion schemes. Additional, simple concepts in category
-theory was introduced motivated by the idea that many concepts in functional
-programming have origins in this theory. This allowed for a streamlined 
-derivation of the catamorphism and important theorems were shown.
+The purpose of this report was to show a in depth analysis of the
+catamorphism as an example from the set of recursion schemes.
+Additional, simple concepts in category theory was introduced motivated
+by the idea that many concepts in functional programming have origins in
+this theory. This allowed for a streamlined derivation of the
+catamorphism and important theorems were shown.
 
 Though only the catamorphism was shown, it is quite restrictive and
-forms only a small part of the large class of recursion schemes.
-Since Meijer, more recursion schemes have been introduced to capture more 
-variations of recursion - some more useful than others. This growth
-has turned the set into a zoo of morphisms with attempts to unify
-them. 
+forms only a small part of the large class of recursion schemes. Since
+Meijer, more recursion schemes have been introduced to capture more
+variations of recursion - some more useful than others. This growth has
+turned the set into a zoo of morphisms with attempts to unify them.
 
 However powerful these recursion schemes are, they are not turing
-complete. This is a property that (most) GPLs have but 
-may not be necessary for DSLs. In general, it is true that DSLs are not
-and incorporating it as part of the language is unneeded. It will 
-introduce unnecessary complexities in the language which is exactly
-what DSLs avoiding.
+complete. This is a property that (most) GPLs have but may not be
+necessary for DSLs. In general, it is true that DSLs are not and
+incorporating it as part of the language is unneeded. It will introduce
+unnecessary complexities in the language which is exactly what DSLs
+avoiding.
 
-In the future, a similar approach for this report can be taken
-but with generalised unfolds e.g. anamorphism to derive and structure 
-operational semantics.
+In the future, a similar approach for this report can be taken but with
+generalised unfolds e.g. anamorphism to derive and structure operational
+semantics.
 
 References
 ----------
