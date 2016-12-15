@@ -9,7 +9,7 @@ Abstract
 
 This report discusses structured recursion as a way to derive program
 semantics. In particular, the denotational semantics which can be
-structured as a fold motivates a close examination of its generalised
+structured as a fold motivates a close examination at its generalised
 notion as a recursive operation: the *catamorphism*.
 
 1 Introduction
@@ -145,7 +145,7 @@ It is formally, a functor $F : C \rightarrow D$ consists of:
 
 such that:
 
--   $F id = id$
+-   $F\ id = id$
 -   $F(g \circ f) = F(g) \circ F(f)$
 
 These additional laws preserve the nature of a morphism in the category
@@ -219,7 +219,7 @@ imperatively: allowing for unsafe IO, state etc. As long as the model of
 computation, a category, provides intuition and various categorical
 abstractions as a way to solve problems, it should be embraced.
 
-3 Recursion
+3 Explicit and Structured Recursion
 -----------
 
 Recursion in its essence is something defined in terms of itself. It is
@@ -308,7 +308,7 @@ However, by using the paradoxical Y combinator, we can replicate
 recursive behaviour. It is, by definition, a higher-order function, f,
 that takes a non-recursive function that satisfies the following:
 
-$$y f = \forall f : f (y  f) $$
+$$y\ f = \forall f : f (y  f) $$
 
 This concept can be defined in Haskell's type definition as follows:
 
@@ -462,30 +462,34 @@ terminate.
 In the recursion schemes provided by Meijer et al., the property to
 guarantee termination is exclusive to the para and catamorphism.
 Conversely, the ana and apomorphism guarantees co-termination - it will
-keep producing data. The hylomorphism is an interesting recursion scheme
-in its own right, it consists of the composition of cata and anamorphism
-which captures general recursion - a more powerful type of recursion
-than primitive. It also gives us turing completeness thus losing all
-guarantees of termination.
+keep producing data. 
 
 6 Conclusion
 ------------
 
-Structure
+The purpose of this report was to show a in depth analysis of the catamorphism as an
+example from the set of recursion schemes. Additional, simple concepts in category
+theory was introduced motivated by the idea that many concepts in functional
+programming have origins in this theory. This allowed for a streamlined 
+derivation of the catamorphism and important theorems were shown.
 
-Looking back
+Though only the catamorphism was shown, it is quite restrictive and
+forms only a small part of the large class of recursion schemes.
+Since Meijer, more recursion schemes have been introduced to capture more 
+variations of recursion - some more useful than others. This growth
+has turned the set into a zoo of morphisms with attempts to unify
+them. 
 
--   Category as a model of computation
--   Meijer et al work.
--   other recursion schemes introduced for other types of recursion.
--   unification of recursion schemes.
+However powerful these recursion schemes are, they are not turing
+complete. This is a property that (most) GPLs have but 
+may not be necessary for DSLs. In general, it is true that DSLs are not
+and incorporating it as part of the language is unneeded. It will 
+introduce unnecessary complexities in the language which is exactly
+what DSLs avoiding.
 
-Looking forward
-
--   unification of recursion schemes?
--   unfolds less used perhaps should be used more.
--   ???
--   
+In the future, a similar approach for this report can be taken
+but with generalised unfolds e.g. anamorphism to derive and structure 
+operational semantics.
 
 References
 ----------
