@@ -495,15 +495,18 @@ generalised unfolds e.g. anamorphism to derive and structure operational
 semantics.
 
 \newpage
-
 References
 ----------
 
-\[1\] Hutton, G. Fold and unfold for program semantics. Proc. 3rd ACM SIGPLAN International
-Conference on Functional Programming. (1998).
-\[2\] Gibbons, Jeremy. Wu, Nicholas. Folding domain-specific languages: Deep and shallow embedding (functional pearl). (2014).
-\[3\] Meijer, Erik. Fokkinga, Maarten. Paterson, Ross. Functional programming with bananas, lenses, envelopes and barbed wire. (1991). FPLCA. LNCS, vol. 523. Springer. Pages 124-144.
-\[4\]  Philip Wadler. Theorems for free ! In Proc. 1989 ACM Conference on Lisp and Functional
-Programming, pages 347{359, 1989.
-\[5\] Building Domain Specific Embedded Language.
-\[6\] Van Deursen, Arie. Klint, Paul. Visser, Joost. Domain-Specific Languages: An Annotated Bibliography. (2000). ACM SIGPLAN Notices.
+\[1\] Hutton, G. Fold and unfold for program semantics. Proc. 3rd ACM
+SIGPLAN International Conference on Functional Programming. (1998).\
+\[2\] Gibbons, Jeremy. Wu, Nicholas. Folding domain-specific languages:
+Deep and shallow embedding (functional pearl). (2014).\
+\[3\] Meijer, Erik. Fokkinga, Maarten. Paterson, Ross. Functional
+programming with bananas, lenses, envelopes and barbed wire. (1991).
+FPLCA. LNCS, vol. 523. Springer. Pages 124-144.\
+\[4\] Philip Wadler. Theorems for free ! In Proc. 1989 ACM Conference on
+Lisp and Functional Programming, pages 347{359, 1989.\
+\[5\] Building Domain Specific Embedded Language.\
+\[6\] Van Deursen, Arie. Klint, Paul. Visser, Joost. Domain-Specific
+Languages: An Annotated Bibliography. (2000). ACM SIGPLAN Notices.
