@@ -96,7 +96,10 @@ The structure of the report is as follows:
     characterised by folds, which is captured in the set of recursion
     schemes as the catamorphisms. This report will show its derivation,
     theorems.
-5.  Termination Property - ...
+5.  Termination Property - Catamorphism, unlike explicit recursion,
+    allows the programmer to reason with the termination of the program.
+    This section will explain the termination property of a small subset
+    of recursion schemes.
 
 2 Introduction to Category Theory
 ---------------------------------
