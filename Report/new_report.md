@@ -353,7 +353,7 @@ it.
 ### 5.2 Derivation
 
 Given an initial F-algebra, there is a unique homomorphism to all
-F-algebras in Alg(F). The catamorphism, denoted `$\llparenthesis alg \rrparenthesis$`
+F-algebras in Alg(F). The catamorphism, denoted $\llparenthesis alg \rrparenthesis$
 corresponds to the obersvation of
 this homomorphism from the initial algebra to some algebra.
 
