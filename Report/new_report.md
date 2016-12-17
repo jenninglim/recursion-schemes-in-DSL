@@ -352,6 +352,11 @@ it.
 
 ### 5.2 Derivation
 
+Given an initial F-algebra, there is a unique homomorphism to all
+F-algebras in Alg(F). The catamorphism, denoted $\llparenthesis alg \rrparenthesis$
+corresponds to the obersvation of
+this homomorphism from the initial algebra to some algebra.
+
 $$
 \begin{matrix}
   & F(Fix F) & \underset{In}{\to} & Fix F \\
@@ -360,13 +365,8 @@ $$
 \end{matrix}
 $$
 
-The catamorphism takes the data type in the form of the initial algebra
-$(Fix F, in)$ for some endofunctor $F$ which represents the pattern
-functor. Since it is initial, there exists a unique F-algebra
-homomorphism to some arbitrary algebra $(A, alg)$ in the category of
-F-algebras for the pattern functor $F$. The catamorphism corresponds to
-the observation of this homomorphism from the initial algebra to some
-algebra.
+The initial algebra is the data type $(Fix F, in)$, for some
+endofunctor $F$ which represents our pattern functor.
 
 This is can be implemented in Haskell as follows:
 
@@ -399,9 +399,24 @@ be used for free!
 #### Fusion
 
 Fusion law for catamorphism \[3\] allows a composition of functions with
-a catamorphism to transformed to a single catamorphism. This will
-eliminate all intermediate data types and is arguable one of the most
-important laws.
+a catamorphism to transformed to a single catamorphism. It is one of the
+for program derivation. It states that:
+
+$$
+h \circ f = g \circ F\ h \Rightarrow h \circ $\llparenthesis f \rrparenthesis$
+= $\llparenthesis g \rrparenthesis$
+$$
+
+This can be proved by producing a diagram.
+
+$$
+\begin{matrix}
+  & F(Fix F) & \underset{In}{\to} & Fix F \\
+  fmap(cata alg) & \downarrow& & \downarrow & cata alg\\
+  & F(A) & \underset{f}{\to} & A \\
+  h & \downarrow & & \downarrow & F\ h
+\end{matrix}
+$$
 
           h . f = g . fmap h => h . cata f = cata g
 
