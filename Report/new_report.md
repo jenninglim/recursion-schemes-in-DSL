@@ -48,16 +48,16 @@ involves implementing the language from scratch: everything that you
 need in a language has to be developed, no concessions are made. Its
 characteristics are tailored specifically to the problem domain.
 However, the drawback to this approach is that it is very costly to
-develop and maintain, as a result standalone DSLs are developed when
+develop and maintain. As a result, standalone DSLs are developed when
 absolutely needed.
 
 Embedded DSLs are implemented by extending a GPL, this approach uses the
 existing language constructs to build the language. They share the
 generic features of the base language thus the embedded DSL offer the
-addition power of its base GPL as well as their domain specific
-expressivity. Embedded DSLs often extends functional languages -
-features that is part of this class of languages such as higher order
-functions, monads, algebraic data types makes the develop of embedded
+additional power of its base GPL, as well as their domain specific
+expressivity. Embedded DSLs often extend functional languages -
+features that are part of this class of languages such as higher order
+functions, monads, algebraic data types make the development of embedded
 DSL much easier.
 
 The nature of functional languages, especially Haskell, have a strong
@@ -70,31 +70,31 @@ it captures the common pattern of traversing and processing a
 structurally inductive data structure. The abundant usage of folds is
 extensive, in fact, the denotational semantics, an approach that gives
 mathematical models to the semantics of a program, can be structured and
-characterised by folding over its syntax \[1\]. This is why DSL can be
+characterised by folding over its syntax \[1\]. This is why DSLs can be
 folded with great success \[2\].
 
 This motivates us to look closely at the generalisations of folds as a
 set of combinators introduced by Meijer et al called *recursion
-schemes*. The authors used key concepts from Category theory such as
+schemes*. The authors used key concepts from Category Theory such as
 algebras and functors for a clean way to formalise the structure of
-traversing and evaluation of recursive data structures.
+traversing and evaluating recursive data structures.
 
 The structure of the report is as follows:
 
 1.  A brief introduction to Category Theory - Many ideas in Haskell have
-    origins in category theory and arguably the reason why functional
+    origins in Category Theory and arguably the reason why functional
     programming is so successful. This section introduces the necessary
     knowledge for understanding the simple yet elegant derivation of the
     catamorphism.
 2.  Explicit and Structure Recursion - Discussing the drawbacks of
     explicit recursion and why structured recursion should always be
     used if possible.
-3.  Pattern and Fix Point of Functors - Given a recursive data structure
-    the explicit recursion can be abstract away recursion at the type
+3.  Pattern and Fix Point of Functors - Given a recursive data structure,
+    the explicit recursion can be abstract away at the type
     level.
 4.  Recursion Schemes - Since denotational semantics can be
     characterised by folds, which is captured in the set of recursion
-    schemes as the catamorphisms. This report will show its derivation,
+    schemes as the catamorphisms. This section will show its derivation,
     theorems.
 5.  Termination Property - Catamorphism, unlike explicit recursion,
     allows the programmer to reason with the termination of the program.
@@ -104,7 +104,7 @@ The structure of the report is as follows:
 2 Introduction to Category Theory
 ---------------------------------
 
-Category theory is the study of mathematical structure infamous for
+Category theory is the study of mathematical structure, infamous for
 being one of the most abstract theories in mathematics. Its generality
 allows it to be applied to many areas of computer science: from the
 design of programming languages to automata theory \[reference here?\].
@@ -112,7 +112,7 @@ design of programming languages to automata theory \[reference here?\].
 A *category* can be thought of as a family of mathematical structures
 coupled with the idea of structure preserving maps. It captures the idea
 composition in its definition which is, arguably, the nature of
-computation. Unsurprisingly, a category can be used a model of
+computation. Unsurprisingly, a category can be used as a model of
 computation i.e. in Haskell, its types and functions can be modelled as
 a *category* called `Hask`, where the types form the objects and
 functions between two types, the morphisms.
@@ -136,12 +136,12 @@ for every object. Because of this, many category theorists believe that
 the morphisms are of greater importance than objects because they reveal
 the true underlying structure.
 
-It is natural to consider a structure preserving map similar idea to
-morphism but for categories. The functor is a mapping between categories
+It is natural to consider a structure preserving map as a similar idea to
+morphism - but for categories. The functor is a mapping between categories
 but with additional properties so that the categorical structure is
 preserved.
 
-It is formally, a functor $F : C \rightarrow D$ consists of:
+It is formally a functor $F : C \rightarrow D$ which consists of:
 
 -   mapping $A \rightarrow F(A): C \rightarrow D$
 -   mapping $f \rightarrow F(f): C(A,B) \rightarrow D(FA, FB)$
@@ -161,7 +161,7 @@ The functor class is defined as follows:
       class Functor f where
         fmap :: (a -> b) -> f a -> f b
 
-The additional properties that a categoric endofunctor must satisfied is
+The additional properties that a categoric endofunctor must satisfy is
 captured in Haskell by the functor laws, that each and every instance
 must satisfy:
 
@@ -177,13 +177,13 @@ can write their code in whichever category that is most appropriate and
 
 There is one category of particular interest - the category of
 F-algebras.\
-Given a category C and an endofunctor $F: C \rightarrow C$ then an
+Given a category C and an endofunctor $F: C \rightarrow C$, then an
 F-algebra is a tuple $(A,f)$ where,
 
 -   $A$ is an object in $C$ is called the *carrier* of the algebra.
 -   $f$ is a morphism $F(A) \rightarrow A$.
 
-A homomorphism from a F-algebra $(A,\alpha)$ to another F-algebra
+A homomorphism from an F-algebra $(A,\alpha)$ to another F-algebra
 $(B,\beta)$ is a morphism $C(A,B)$ such that:
 
 -   $f \circ a = F(f) \circ b$.
@@ -206,11 +206,11 @@ morphism from the initial F-algebra to all other F-algebras. Initial
 algebras is an interesting concept which can be used to model our data
 type.
 
-The category of F-algebras constitutes F-algebra as objects and the
+The category of F-algebras constitutes F-algebras as objects and the
 F-algebra homomorphisms, the morphisms. The category can be used to
 model how the data structure i.e. lists or trees can be transformed. The
 initial algebra of the category corresponds to our initial data
-structure and the algebras corresponds to the function that can be
+structure and the algebras correspond to the function that can be
 performed on the data structure.
 
 It is interesting to see that the category of `Hask` does NOT form a
@@ -225,17 +225,17 @@ abstractions as a way to solve problems, it should be embraced.
 3 Explicit and Structured Recursion
 -----------------------------------
 
-Recursion in its essence is something defined in terms of itself. It is
+Recursion, in its essence, is something defined in terms of itself. It is
 a simple yet powerful concept that forms the bread and butter for
 functional computation. Explicit recursion is a way of describing self
 referencing functions that is overused for the uninitiated. Arbitrary
 properties of the explicitly recursive function will need to be
-theorised and proved over and over again which can be simply avoided by
+theorised and proved over and over again, which can be simply avoided by
 carefully abstracting away the common recursive patterns.
 
 Its profuseness implies that by abstracting away common patterns, it
 could replace a plethora of explicit recursive functions. Meijer et al
-introduced a set of combinators that captures different types of
+introduced a set of combinators that capture different types of
 recursion. The catamorphism captures the concept of iteration - a
 special case of primitive recursion which is captured by the
 paramorphism. Meijer also introduced its duals for unfolds and
@@ -245,19 +245,19 @@ type of program semantics called operational semantics \[1\] where the
 meaning of the program is defined in terms of transition functions
 during program execution.
 
-It has been known for a long time the use of `gotos` in imperative
+It has been known for a long time that the use of `gotos` in imperative
 programming obscures the structure of the program and reduces the
-programmers ability to reason with their code\[citation\]. For the same
-reason `gotos` should be avoided, we should always use structured
+programmer's ability to reason with their code\[citation\]. For the same
+reason, `gotos` should be avoided. We should always use structured
 recursion whenever possible. This is because although explicit is more
-intuitive, structural recursion allows the programmer to reason with the
+intuitive, structural recursion allows the programmer to reason with
 their code like never before. In addition, there is a catalogue of
-useful theorems and laws which can used to improve each function that
+useful theorems and laws which can be used to improve each function that
 utilises structural recursion for free. Moreover, as a byproduct of
 abstracting away the recursive patterns, it separates how the function
-is computed from its underlying purpose. This means for programmers,
-trained in the art of structuring recursion, can concentrate on what the
-computation is doing rather than how it is done.
+is computed from its underlying purpose. This means that programmers
+trained in the art of structuring recursion can concentrate on what the
+computation is doing, rather than how it is done.
 
 4 Hiding (explicit) recursion
 -----------------------------
@@ -274,7 +274,7 @@ Let’s consider a very simple language of addition and subtraction.
               | Add Expr Expr
               | Sub Expr Expr
 
-The recursive spot in `Expr` can be parameterised with `x` producing a
+The recursive spot in `Expr` can be parameterised with `x`, producing a
 near identical data type:
 
     data ExprF x = Val Int
@@ -330,18 +330,18 @@ initial algebra: the F-algebra (Fix f, In).
 5 Recursion Schemes
 -------------------
 
-Recursion schemes has risen from attempts to tame the unyielding power
-of recursion, as a results, there is now a large zoo of formalised
-recursive operators that captures different types of recursion. There
-has been attempts to unify these schemes \[citations here\].
+Recursion schemes have risen from attempts to tame the unyielding power
+of recursion. As a result, there is now a large zoo of formalised
+recursive operators that capture different types of recursion. There
+have been attempts to unify these schemes \[citations here\].
 
-Denotational semantics can be structured as a fold \[1\] which in the
+Denotational semantics can be structured as a fold \[1\], which in the
 zoo of recursion schemes is called the catamorphism. It motivates a
 close examination of this particular scheme and it will be the main
 focus of this section. References might be made to other recursive
 operators to provide the idea that these schemes are not limited to
 recursion. They can be corecursive, the dual of recursion, which
-generates data. And refolds which uses a combination of both recursion
+generates data, and refolds which uses a combination of both recursion
 and corecursion.
 
 ### 5.1 Catamorphism
@@ -360,7 +360,7 @@ $$
 \end{matrix}
 $$
 
-The catamorphism takes the data type in the form the initial algebra
+The catamorphism takes the data type in the form of the initial algebra
 $(Fix F, in)$ for some endofunctor $F$ which represents the pattern
 functor. Since it is initial, there exists a unique F-algebra
 homomorphism to some arbitrary algebra $(A, alg)$ in the category of
@@ -456,10 +456,10 @@ the ability to reason with the termination of the program.
 
 Catamorphism gives us the ability to guarantee its termination. The
 function calls are made only on smaller elements of the inductively
-defined structure implying it will tend towards its base case, giving
+defined structure, implying that it will tend towards its base case, giving
 program termination. This is also true for the paramorphism. With
 explicit recursion, there is nothing to stop the programmer to
-recursively call the function on larger data type causing it to never
+recursively call the function on a larger data type causing it to never
 terminate.
 
 In the recursion schemes provided by Meijer et al., the property to
@@ -470,9 +470,9 @@ keep producing data.
 6 Conclusion
 ------------
 
-The purpose of this report was to show a in depth analysis of the
+The purpose of this report was to show an in depth analysis of the
 catamorphism as an example from the set of recursion schemes.
-Additional, simple concepts in category theory was introduced motivated
+Additionally, simple concepts in category theory was introduced, which were motivated
 by the idea that many concepts in functional programming have origins in
 this theory. This allowed for a streamlined derivation of the
 catamorphism and important theorems were shown.
@@ -485,10 +485,10 @@ turned the set into a zoo of morphisms with attempts to unify them.
 
 However powerful these recursion schemes are, they are not turing
 complete. This is a property that (most) GPLs have but may not be
-necessary for DSLs. In general, it is true that DSLs are not and
+necessary for DSLs. In general, it is true that DSLs are not, and
 incorporating it as part of the language is unneeded. It will introduce
 unnecessary complexities in the language which is exactly what DSLs
-avoiding.
+try to avoid.
 
 In the future, a similar approach for this report can be taken but with
 generalised unfolds e.g. anamorphism to derive and structure operational
