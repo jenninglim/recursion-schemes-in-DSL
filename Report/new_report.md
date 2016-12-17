@@ -403,8 +403,8 @@ a catamorphism to transformed to a single catamorphism. It is one of the
 for program derivation. It states that:
 
 $$
-h \circ f = g \circ F\ h \Rightarrow h \circ $\llparenthesis f \rrparenthesis$
-= $\llparenthesis g \rrparenthesis$
+h \circ f = g \circ F\ h \Rightarrow h \circ \llparenthesis f \rrparenthesis
+= \llparenthesis g \rrparenthesis
 $$
 
 This can be proved by producing a diagram.
