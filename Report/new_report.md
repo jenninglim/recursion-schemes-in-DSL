@@ -414,24 +414,6 @@ where,
 See Appendix. The example given is one of pretty printing functions are
 called "prettyFast" and "prettySlow".
 
-#### Composition
-
-It is not true generally that catamorphisms compose but there is a
-special case. The compose law \[3\] implies that the number of
-traversals required by a function that satisfies the special case can be
-reduced which theoretically speeds up performance.
-
-It states that:
-
-         cata f . cata (Fix . h) = cata (f . h)
-
-where,
-
-         f :: f a -> a
-         h :: g a -> f a
-
-This theorem can be used to optimise code. See Appendix.
-
 #### Banana split theorem
 
 Algebras that are over the same functor but with different carrier types
