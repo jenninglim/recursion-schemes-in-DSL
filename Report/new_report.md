@@ -353,7 +353,7 @@ it.
 ### 5.2 Derivation
 
 Given an initial F-algebra, there is a unique homomorphism to all
-F-algebras in Alg(F). The catamorphism, denoted $\llparenthesis alg \rrparenthesis$
+F-algebras in Alg(F). The catamorphism, denoted `$\llparenthesis alg \rrparenthesis$`
 corresponds to the obersvation of
 this homomorphism from the initial algebra to some algebra.
 
@@ -401,7 +401,7 @@ be used for free!
 Fusion law for catamorphism \[3\] allows a composition of functions with
 a catamorphism to transformed to a single catamorphism. It is one of the
 for program derivation. It states that:
-
+```
 $$
 h \circ f = g \circ F\ h \Rightarrow h \circ \llparenthesis f \rrparenthesis
 = \llparenthesis g \rrparenthesis
@@ -417,6 +417,7 @@ $$
   h & \downarrow & & \downarrow & F\ h
 \end{matrix}
 $$
+```
 
           h . f = g . fmap h => h . cata f = cata g
 
