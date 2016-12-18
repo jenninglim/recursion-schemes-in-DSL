@@ -109,6 +109,8 @@ being one of the most abstract theories in mathematics. Its generality
 allows it to be applied to many areas of computer science: from the
 design of programming languages to automata theory \[reference here?\].
 
+### Category
+
 A *category* can be thought of as a family of mathematical structures
 coupled with the idea of structure preserving maps. It captures the idea
 composition in its definition which is, arguably, the nature of
@@ -117,7 +119,7 @@ computation i.e. in Haskell, its types and functions can be modelled as
 a *category* called `Hask`, where the types form the objects and
 functions between two types, the morphisms.
 
-Formally, a category $C$ is an algebraic structure defined on a
+Formally, a category ${\scriptstyle C}$ is an algebraic structure defined on a
 collection of:
 
 -   objects (denoted $A, B, C, ...$)
@@ -135,6 +137,8 @@ preserves associativity, composition and the existence of an identity
 for every object. Because of this, many category theorists believe that
 the morphisms are of greater importance than objects because they reveal
 the true underlying structure.
+
+### Functors
 
 It is natural to consider a structure preserving map as a similar idea to
 morphism - but for categories. The functor is a mapping between categories
@@ -175,6 +179,30 @@ for function reusability by "promoting" it from type `a -> b` to
 can write their code in whichever category that is most appropriate and
 "lift" it with `fmap` to be applied to a different category.
 
+### Diagrams
+
+Diagrams can be used in Category Theory for representing type information.
+A diagrams is said to *commute* if the map produced by following any path
+is the same.
+
+For example: Given $f :: A \rightarrow B$, $g :: B \rightarrow C$ and $h : A \rightarrow C$,
+we can represent this as a diagram and it commutes:
+
+$$
+\begin{tikzcd}
+ A \arrow[r,"f"] \arrow[rd, "h"]
+  & B \arrow[d,"g"]\\
+  & C
+\end{tikzcd}
+$$
+
+Although it is possible to formal define rules about the diagrams and its
+reasoning: it will be avoided in this report. Here, diagrams will be used
+for simple purposes - to give the reader a
+clear visual representation for the necessary type information, and in turn
+hopefully making it more intuitive.
+
+### F-Algebras
 There is one category of particular interest - the category of
 F-algebras.\
 Given a category C and an endofunctor $F: C \rightarrow C$, then an
@@ -189,11 +217,10 @@ $(B,\beta)$ is a morphism $C(A,B)$ such that:
 -   $f \circ a = F(f) \circ b$.
 
 $$
-\begin{matrix}
-  & F(A) &\underset{\alpha}{\to} &\ A \\
-  F (f) &\downarrow& &\ \downarrow& f\\
-  & F(B) &\underset{\beta}{\to} &\ B \\
-\end{matrix}
+\begin{tikzcd}
+ F A \arrow[r,"\alpha"] \arrow[d,"F f"] & A \arrow[d,"f"] \\
+ F B \arrow[r,"\beta"]                  & D
+\end{tikzcd}
 $$
 
 In Haskell, the following definition is found in
@@ -213,8 +240,63 @@ initial algebra of the category corresponds to our initial data
 structure and the algebras correspond to the function that can be
 performed on the data structure.
 
+### Products and Coproducts
+Many new data types can be formed from composition or tupling existing
+datatypes together. These concept exists in a category-theoretic
+perspective called: products and coproducts.
+
+Product of two objects $ A, B $ in a category theory is formalised to
+capture the same concept as constructions in other areas of mathematics
+e.g. the cartesian product in set theory. It is
+A product (of two objects) is defined as:
+
+* an object: denoted $A \times B$.
+* two morphisms: denoted $outl :: A \times B \rightarrow A$ and $outr :: A \times B \rightarrow B$
+
+satisfy for each arrow $f :: A \rightarrow B$ and $g :: B \rightarrow C$, there
+exists an arrow denoted $\langle f , g\rangle$ such that the following holds:
+
+$$h = \langle f , g\rangle \equiv outl \circ h = f \land outr \circ h = g$$
+
+This is summarised by the following diagram:
+
+$$
+\begin{tikzcd}
+             & A \arrow[dl,"f"]  \arrow[d,"\langle {f , g}\rangle"] \arrow[dr,"g"] & \\
+A & A \times B \arrow[l,"outl"] \arrow[r,"outr"] & B
+\end{tikzcd}
+$$
+
+A coproduct is the categorical dual of a product, which means that the definition is the same
+except the morphisms are reverse. Despite its dual nature coproducts with products, they typically are drastically different from each other.
+It consists of:
+
+* an object: denoted $A + B$
+* two morphisms: denoted $inl :: A + B \rightarrow B$ and $inr :: A + B \rightarrow C$
+
+satisfying:
+satisfy for each arrow $f :: A \rightarrow B$ and $g :: B \rightarrow C$, there
+exists an arrow denoted $[f , g]$ such that the following holds:
+
+$$h = [ f , g] \equiv h \circ inl = f \land h \circ inr = g$$
+
+This is summarised by the following diagram:
+
+$$
+\begin{tikzcd}
+                  & A \arrow[dl,"f"]  \arrow[d,"{[f , g]}"] \arrow[dr,"g"] & \\
+A \arrow[r,"inl"] & {A + B}  & B \arrow[l,"inr"]
+\end{tikzcd}
+$$
+
+
+### Remarks
+
 It is interesting to see that the category of `Hask` does NOT form a
-category \[Citation here\]. However, it does not need to perfectly
+category, this is because of bottom value -
+two functions can be defined such that they are the same morphism but
+with different values, which violates the definition of a category \[Citation here\].
+However, it does not need to perfectly
 correspond to the formal definition of a category for language engineers
 to use it as a way to solve practical problems. For example, monads, a
 concept in category theory, is used in Haskell as a way to program
@@ -268,37 +350,39 @@ point.
 
 ### 4.1 Parameterising Recursion
 
-Let’s consider a very simple language of addition and subtraction.
+#### Polynomial functors
+Functors can be built from constant, product and coproducts.
+This concept is called the polynomial of functors, this can be
+used as a model for data types. The model functor describes the
+structure of the data. It is defined inductively as follows:
+
+* The identity $id$ and the constant functions $f$ are polynomial functors.
+* If F and G are polynomial then their composition, sum and product is also polynomial.
+
+For example, consider a very simple language of addition.
 
     data Expr = Val Int
               | Add Expr Expr
-              | Sub Expr Expr
 
-The recursive spot in `Expr` can be parameterised with `x`, producing a
-near identical data type:
+The equivalent polynomial functor F called the base functor {citation} is
+defined by $F\ A = 1 + A \times A$ and $F\ h = id + h \times h$. Observe
+that the mapping of the functor F for objects corresponds to the definition of the
+*pattern functor*:
 
     data ExprF x = Val Int
                  | Add x x
-                 | Sub x x
 
-In the new definition of `Expr`, `ExprF`, we have parameterised this
-type in terms of its subexpression, this is called the *pattern functor*
-which is almost identical to the original `Expr`.
+Notice that the recursive spot in `Expr` has be parameterised with `x`.
+In this new definition of `Expr`, `ExprF`, its type has been defined
+in terms of its subexpression - it is almost identical to the original `Expr`.
 
-Notice that it is trivial to make ExprF an instance of `functor`.
+The functor instance of ExprF also corresponds to the mapping of the functor for
+a morphism:
 
     instance Functor ExprF where
       fmap :: (a -> b) -> f a -> f b
-      fmap f (Val Int) = Int
       fmap f (Add x y) = Add (f x) (f x)
-      fmap f (Sub x y) = Sub (f x) (f y)
 
-In fact, it is so trivial that GHC can derive it for us if we enable the
-following extension, called a language pragma:
-
-    {-# LANGUAGE DeriveFunctor #-}
-
-and we can just use `deriving Functor` in our data declaration.
 
 However, `ExprF` is not quite equivalent, it need to somehow arbitrarily
 nest `ExprF` in the definition.
@@ -307,7 +391,7 @@ nest `ExprF` in the definition.
 
 In lambda calculus, it is not possible to refer to the function
 definition in its body: there is no feature for (explicit) recursion.
-However, by using the paradoxical Y combinator, we can replicate
+However, by using the paradoxical Y combinator, it can replicate
 recursive behaviour. It is, by definition, a higher-order function, f,
 that takes a non-recursive function that satisfies the following:
 
@@ -353,15 +437,15 @@ it.
 ### 5.2 Derivation
 
 Given an initial F-algebra, there is a unique homomorphism to all
-F-algebras in Alg(F). The catamorphism, denoted $\llparenthesis alg \rrparenthesis$
-corresponds to the obersvation of
+F-algebras in Alg(F). The catamorphism, denoted $\llparenthesis f \rrparenthesis$,
+corresponds to the observation of
 this homomorphism from the initial algebra to some algebra.
 
 $$
 \begin{matrix}
   & F(Fix F) & \underset{In}{\to} & Fix F \\
-  fmap(cata alg) & \downarrow& &\ \downarrow& cata alg\\
-  & F(A) & \underset{alg}{\to} & A
+  F\llparenthesis f \rrparenthesis  & \downarrow& &\ \downarrow& \llparenthesis f \rrparenthesis\\
+  & F(A) & \underset{f}{\to} & A
 \end{matrix}
 $$
 
@@ -401,23 +485,31 @@ be used for free!
 Fusion law for catamorphism \[3\] allows a composition of functions with
 a catamorphism to transformed to a single catamorphism. It is one of the
 for program derivation. It states that:
-```
+
+
 $$
-h \circ f = g \circ F\ h \Rightarrow h \circ \llparenthesis f \rrparenthesis
-= \llparenthesis g \rrparenthesis
+  h \circ f = g \circ F\  h \Rightarrow h \circ \llparenthesis f \rrparenthesis  = \llparenthesis g \rrparenthesis
 $$
 
 This can be proved by producing a diagram.
 
 $$
 \begin{matrix}
-  & F(Fix F) & \underset{In}{\to} & Fix F \\
-  fmap(cata alg) & \downarrow& & \downarrow & cata alg\\
-  & F(A) & \underset{f}{\to} & A \\
-  h & \downarrow & & \downarrow & F\ h
+  & F\ Fix F & \underset{In}{\to} & Fix F \\
+  F\ \llparenthesis f \rrparenthesis & \downarrow& & \downarrow & \llparenthesis f \rrparenthesis\\
+  & F\ A & \underset{f}{\to} & A \\
+  F\ h & \downarrow & & \downarrow &  h \\
+  & F\ B & \underset{g}{\to} & B \\
 \end{matrix}
 $$
-```
+
+From the assumption, this diagram commutes. Since the algebra
+(Fix, In) is initial, by definition, there is a homomorphism to
+the algebra (F B, g) which is unique so we have:
+
+$$ h \circ \llparenthesis f \rrparenthesis = \llparenthesis g \rrparenthesis $$
+
+This law can be used in Haskell, with the synonymous proposition:
 
           h . f = g . fmap h => h . cata f = cata g
 
@@ -427,9 +519,6 @@ where,
           g :: f b -> b
           h :: a -> b
 
-See Appendix. The example given is one of pretty printing functions are
-called "prettyFast" and "prettySlow".
-
 #### Banana split theorem
 
 Algebras that are over the same functor but with different carrier types
@@ -437,12 +526,37 @@ can be combined. This means that more than one catamorphism can be
 performed at the same time. This is called the banana-split theorem
 \[3\] which states that:
 
-        cata f &&& cata g = cata ( f . fmap fst &&& g . fmap snd )
-        
-        (&&&) :: (a -> b) -> (a -> c) -> (a -> (b , c))
-        f &&& g = \x -> (f x, g x)
+$$
+\langle \llparenthesis h \rrparenthesis ,\llparenthesis k \rrparenthesis \rangle
+= \llparenthesis \langle h \circ F\ outl , k \circ F\ outr \rangle \rrparenthesis
+$$
 
-See appendix.
+To prove this it is enough to prove that the diagram below commutes
+i.e.  
+$\langle \llparenthesis h \rrparenthesis ,\llparenthesis k \rrparenthesis \rangle \circ In =
+\langle h \circ F\ outl , k \circ F\ outr \rangle \circ F\ \langle \llparenthesis h \rrparenthesis ,\llparenthesis k \rrparenthesis \rangle$
+
+$$
+\begin{matrix}
+  & F\ Fix F & \underset{In}{\to} & Fix F \\
+  F\ \langle \llparenthesis h \rrparenthesis ,\llparenthesis k \rrparenthesis \rangle & \downarrow& & \downarrow & \langle \llparenthesis h \rrparenthesis ,\llparenthesis k \rrparenthesis \rangle\\
+  & F\ A & \underset{\langle h \circ F\ outl , k \circ F outr \rangle}{\to} & A \\
+\end{matrix}
+$$
+Proof (Algebra of programming):
+\begin{align*}
+  & \ \langle \llparenthesis h \rrparenthesis ,\llparenthesis k \rrparenthesis \rangle \circ In \\
+  &= {split\ fusion} \\
+  & \ \langle \llparenthesis h \rrparenthesis \circ In ,\llparenthesis k \rrparenthesis \circ In \rangle \\
+  &= {catamorphism} \\
+  & \ \langle h \circ F \llparenthesis h \rrparenthesis  ,k \circ F\llparenthesis k \rrparenthesis  \rangle \\
+  &= split\ cancellation \\
+  & \ \langle h \circ F( outl \circ \langle \llparenthesis h \rrparenthesis, \llparenthesis h \rrparenthesis \rangle)  ,k \circ F( outr \circ \langle \llparenthesis h \rrparenthesis, \llparenthesis h \rrparenthesis \rangle ) \rangle \\
+  &= Composition\ law\ of\ functor\ F. \\
+  & \ \langle h \circ F\ outl \circ F\ \langle \llparenthesis h \rrparenthesis, \llparenthesis h \rrparenthesis \rangle)  ,k \circ F\ outr \circ F\ \langle \llparenthesis h \rrparenthesis, \llparenthesis h \rrparenthesis \rangle \rangle\\
+  &= split\ fusion \\
+  & \langle h \circ F\ outl , k \circ F\ outr \rangle \circ F\ \langle \llparenthesis h \rrparenthesis ,\llparenthesis k \rrparenthesis \rangle
+\end{align*}
 
 5 Program Termination
 ---------------------
@@ -470,10 +584,10 @@ keep producing data.
 
 The purpose of this report was to show an in depth analysis of the
 catamorphism as an example from the set of recursion schemes.
-Additionally, simple concepts in category theory was introduced, which were motivated
-by the idea that many concepts in functional programming have origins in
-this theory. This allowed for a streamlined derivation of the
-catamorphism and important theorems were shown.
+Additionally, simple concepts in category theory was introduced
+motivated the fact that these ideas can be used as a model of computation.
+This allowed for a categorical perspective of inductively defined data types and
+streamlined derivation of the catamorphism with proof of its theorems.
 
 Though only the catamorphism was shown, it is quite restrictive and
 forms only a small part of the large class of recursion schemes. Since
