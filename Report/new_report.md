@@ -7,7 +7,7 @@ Recursion Scheme in Domain Specific Languages.
 Abstract
 --------
 
-This report discusses structured recursion as a way to derive program
+This report discusses structured recursion to derive program
 semantics. In particular, the denotational semantics which can be
 structured as a fold motivates a close examination at its generalised
 notion as a recursive operation: the *catamorphism*.
@@ -17,26 +17,26 @@ notion as a recursive operation: the *catamorphism*.
 
 Abstraction has proved to be one of the most influential and ubiquitous
 themes in computer science. It is unsurprising that one of its most
-notable triumphs has been its significance in the design of programming
+notable triumphs have been its significance in the design of programming
 languages. The most successful will provide various techniques for
 abstraction at the software level such as higher-order functions,
 objects etc.
 
 General Purpose Languages ("GPL") are programming languages designed to
 tackle problems in every problem domain. Their generality pushes
-programmers to adopt them in their repetoire, however, this makes them
+programmers to adopt them in their repertoire, however, this makes them
 convoluted to anyone lacking programming expertise. This motivates the
 idea of raising the abstraction level such that languages are designed
 for a particular problem domain: it is *domain specific*.
 
 Domain Specific Languages ("DSL") are, usually declarative, programming
 languages that offer more expressivity over a specific problem domain.
-Their development involves a close analysis of the problem domain such
+Their development involves a close analysis of the problem domain so
 that its entire semantics should be captured - no more and no less. The
 nature of these languages imply that they trade their generality for
 focused expressivity. This often makes DSLs small languages since only
 the essential features are captured. Examples of DSLs include SQL, HTML,
-CSS etc.
+LaTe etc.
 
 There are two main ways of developing DSLs:
 
@@ -45,7 +45,7 @@ There are two main ways of developing DSLs:
 
 Standalone is a classical approach for implementing a new language. It
 involves implementing the language from scratch: everything that you
-need in a language has to be developed, no concessions are made. Its
+need in a language must be developed, no concessions are made. Its
 characteristics are tailored specifically to the problem domain.
 However, the drawback to this approach is that it is very costly to
 develop and maintain. As a result, standalone DSLs are developed when
@@ -53,7 +53,7 @@ absolutely needed.
 
 Embedded DSLs are implemented by extending a GPL, this approach uses the
 existing language constructs to build the language. They share the
-generic features of the base language thus the embedded DSL offer the
+generic features with its base language thus the embedded DSL offer the
 additional power of its base GPL, as well as their domain specific
 expressivity. Embedded DSLs often extend functional languages -
 features that are part of this class of languages such as higher order
@@ -67,8 +67,8 @@ functions. Unsurprisingly, many of which share the same recursive
 pattern which can be abstracted away. An example that many functional
 programmers will know and love is *fold* a standard recursive operator,
 it captures the common pattern of traversing and processing a
-structurally inductive data structure. The abundant usage of folds is
-extensive, in fact, the denotational semantics, an approach that gives
+structurally inductive data structure. The use of folds is
+prevalent in functiuonal programming, in fact, the denotational semantics, an approach that gives
 mathematical models to the semantics of a program, can be structured and
 characterised by folding over its syntax [@Hutton]. This is why DSLs can be
 folded with great success [@3].
@@ -92,8 +92,9 @@ The structure of the report is as follows:
 3.  Recursion Schemes - Since denotational semantics can be
     characterised by folds, which is captured in the set of recursion
     schemes as the catamorphisms. This section will focus on this scheme.
-4.  Data types as Initial F-Algebras - To use the catamorphism, our
-    data types much be represented as a initial object.
+4.  Data types as Initial F-Algebras - To use the catamorphism, the
+    data types much be represented as a initial object. This section will
+    attempt to bridge the gap.
 5.  Program Termination - Catamorphism, unlike explicit recursion,
     allows the programmer to reason with the termination of the program.
     This section will explain the termination property of a small subset
@@ -415,15 +416,15 @@ be used for free!
 #### Fusion
 
 Fusion law for catamorphism [@Meijer91functionalprogramming] allows a composition of functions with
-a catamorphism to transformed to a single catamorphism. It is one of the
-for program derivation. It states that:
+a catamorphism to be transformed into a single catamorphism. It is one of the
+ most important laws for program derivation which states that:
 
 
 $$
   h \circ f = g \circ F\  h \Rightarrow h \circ \llparenthesis f \rrparenthesis  = \llparenthesis g \rrparenthesis
 $$
 
-This can be proved by producing a diagram.
+This can be proved by producing a diagram [@Bird:1997:AP:248932]:
 
 $$
 \begin{matrix}
@@ -469,7 +470,7 @@ $$
 = \llparenthesis \langle h \circ F\ outl , k \circ F\ outr \rangle \rrparenthesis
 $$
 
-To prove this it is enough to prove that the diagram below commutes
+To prove this it is enough to prove that the diagram below commutes [@Bird:1997:AP:248932]
 i.e.  
 $\langle \llparenthesis h \rrparenthesis ,\llparenthesis k \rrparenthesis \rangle \circ \alpha =
 \langle h \circ F\ outl , k \circ F\ outr \rangle \circ F\ \langle \llparenthesis h \rrparenthesis ,\llparenthesis k \rrparenthesis \rangle$
@@ -481,7 +482,7 @@ $$
   & F\ A & \underset{\langle h \circ F\ outl , k \circ F\ outr \rangle}{\to} & A
 \end{matrix}
 $$
-Proof [@Bird:1997:AP:248932]:
+Proof:
 \begin{align*}
   & \ \langle \llparenthesis h \rrparenthesis ,\llparenthesis k \rrparenthesis \rangle \circ \alpha \\
   &= {split\ fusion} \\
@@ -609,12 +610,13 @@ terminate.
 Conclusion
 ------------
 
-The purpose of this report was to show an in depth analysis of the
+The purpose of this report was to show an in-depth analysis of the
 catamorphism as an example from the set of recursion schemes.
 To achieve this, simple concepts in category theory was introduced
-motivated the fact that these ideas can be used to streamline the derivation process.
+motivated by the fact that these ideas can be used to streamline the derivation process.
 Many of its core ideas have found its way into functional programs and
-can be used as a model of computation.
+thus, into this report. The reader must recognise how successful it is
+as a model of computation.
 
 Though only the catamorphism was shown, it is quite restrictive and
 forms only a small part of the large class of recursion schemes. Since
@@ -627,16 +629,17 @@ However powerful these recursion schemes are, they are not turing
 complete. This is a property that (most) GPLs have but may not be
 necessary for DSLs. In general, it is true that DSLs are not, and
 incorporating it as part of the language is unneeded. It will introduce
-unnecessary complexities in the language which is exactly what DSLs
-try to avoid. In my opinion, the fight to tame recursion will never be won - if
+unnecessary complexities in the language which is exactly what DSLs are
+trying to avoid. In my opinion, the fight to tame recursion will never be won - if
 it gains turing completeness, the ability to reason will be lost.
 
 In the future:
 
-* a similar approach for this report can be taken but with
+* a similar approach to this report can be taken but with
   generalised unfolds to derive and structure operational
   semantics.
-* an analysis into different representations of initial f-algebras.
+* an analysis into different representations of initial f-algebras
+  as datatypes in programming.
 * an investigation into how extensive and successful category theory
   is as a model for functional programs.
 
