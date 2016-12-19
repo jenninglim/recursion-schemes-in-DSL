@@ -525,16 +525,15 @@ defined by:
 * $F\ A = 1 + A \times A$
 * $F\ h = id + h \times h$.
 
-Observe that the mapping of the functor F for objects corresponds to the definition of the
-*pattern functor*:
+Observe that the mapping of the base functor F corresponds to the definition of the
+*pattern functor* defined as:
 
 ```
   data ExprF x = Val Int
                | Add x x
 ```
 
-The functor instance of `ExprF` also corresponds to the mapping of the functor for
-a morphism:
+In addition, the functor instance definition, in Haskell, of `ExprF` also corresponds to the behaviour of the base functor:
 
 ```
   instance Functor ExprF where
@@ -567,7 +566,7 @@ This forms an algebra and is, in fact, *initial*.
 Initial F-algebra for a given endofunctor, is interestingly unique
 up to isomorphism. This means that, even though there could be many forms
 of the initial object, it does not matter which is used. From the above,
-it is seen that coproducts can produce initial f-algebras. By
+it is seen that coproducts can produce initial f-algebras - this is not the only way. By
 taking the fix point of the pattern functor, it is initial [@free] and exists [@DBLP:journals/scp/Malcolm90].
 
 In lambda calculus, it is not possible to refer to the function
