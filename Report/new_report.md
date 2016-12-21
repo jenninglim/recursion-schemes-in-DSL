@@ -1,7 +1,7 @@
-Scheming it all.
+Scheming it all
 ================
 
-Recursion Scheme in Domain Specific Languages.
+Recursion Scheme in Domain Specific Languages - Jenning Lim
 ----------------------------------------------
 
 Abstract
@@ -9,7 +9,7 @@ Abstract
 
 This report discusses structured recursion to derive program
 semantics. In particular, the denotational semantics which can be
-structured as a fold motivates a close examination at its generalised
+structured as a fold motivates a close examination of its generalised
 notion as a recursive operation: the *catamorphism*.
 
 1 Introduction
@@ -24,10 +24,10 @@ objects etc.
 
 General Purpose Languages ("GPL") are programming languages designed to
 tackle problems in every problem domain. Their generality pushes
-programmers to adopt them in their repertoire, however, this makes them
+programmers to adopt them in their repertoire, however, this aspect makes them
 convoluted to anyone lacking programming expertise. This motivates the
 idea of raising the abstraction level such that languages are designed
-for a particular problem domain: it is *domain specific*.
+for a particular problem domain: they are *domain specific*.
 
 Domain Specific Languages ("DSL") are, usually declarative, programming
 languages that offer more expressivity over a specific problem domain.
@@ -82,7 +82,7 @@ traversing and evaluating recursive data structures.
 The structure of the report is as follows:
 
 1.  A brief introduction to Category Theory - Many ideas in Haskell have
-    origins in Category Theory and arguably the reason why functional
+    origins in Category Theory, which is arguably the reason why functional
     programming is so successful. This section introduces the necessary
     knowledge for understanding the simple yet elegant derivation of the
     catamorphism.
@@ -92,7 +92,7 @@ The structure of the report is as follows:
 3.  Recursion Schemes - Since denotational semantics can be
     characterised by folds, which is captured in the set of recursion
     schemes as the catamorphisms. This section will focus on this scheme.
-4.  Data types as Initial F-Algebras - To use the catamorphism, the
+4.  Data types as Initial $F$-Algebras - To use the catamorphism, the
     data types much be represented as a initial object. This section will
     attempt to bridge the gap.
 5.  Program Termination - Catamorphism, unlike explicit recursion,
@@ -115,7 +115,7 @@ coupled with the idea of structure preserving maps. It captures the idea
 composition in its definition which is, arguably, the nature of
 computation. Unsurprisingly, a category can be used as a model of
 computation i.e. in Haskell, its *category* is called `Hask`, where the types form the objects and
-functions between two types, the morphisms.
+functions between two types: the morphisms.
 
 Formally, a category $\mathbb{C}$ is an algebraic structure defined on a
 collection of:
@@ -127,7 +127,7 @@ additionally, they must satisfy:
 
 -   for each object $A$, there is an identity morphism.
 -   the morphisms are associative.
--   for every object $A, B, C$, its morphisms can be composed called the
+-   for every object $A, B, C$, its morphisms can be composed. This property is called the
     *composition of morphisms*.
 
 Morphisms can be thought of as special functions between objects that
@@ -165,7 +165,7 @@ The functor class is defined as follows:
     fmap :: (a -> b) -> f a -> f b
 ```
 
-The additional properties that a categoric endofunctor must satisfy is
+The additional properties that a categoric endofunctor must satisfy are
 captured in Haskell by the functor laws, that each and every instance
 must satisfy:
 
@@ -174,9 +174,9 @@ must satisfy:
   fmap (f . g) = fmap f . fmap g
 ```
 
-Functors are hidden and prevalent in functional programming. It captures
-the theme of compatibility between categories of data types and allows
-for function reusability by "promoting" it from type `a -> b` to
+Functors are hidden and prevalent in functional programming. They capture
+the theme of compatibility between categories of data types and allow
+for function reusability by "promoting" them from type `a -> b` to
 `f a -> f b` over the functor instance `f`. The functional programmer
 can write their code in whichever category that is most appropriate and
 "lift" it with `fmap` to be applied to a different category.
@@ -189,7 +189,7 @@ is the same.
 
 For example:  
 Given $f : A \rightarrow B$, $g : B \rightarrow C$ and $h : A \rightarrow C$,
-it can represent with the following commutative diagram:
+the functions can be represented more intuitive with the following commutative diagram:
 
 $$
 \begin{tikzcd}
@@ -199,25 +199,25 @@ $$
 \end{tikzcd}
 $$
 
-Although it is possible to formal define rules about the diagrams and its
+Although it is possible to formally define rules about the diagrams and their
 reasoning: it will be avoided in this report. Here, diagrams will be used
 for simple purposes - to give the reader a
 clear visual representation for the necessary type information, and in turn,
-hopefully, making it more intuitive.
+hopefully, make it more intuitive.
 
-### F-Algebras
+### $F$-Algebras
 There is one category of interest for modelling our datatypes - the category of
-F-algebras.\
+$F$-algebras.\
 Given a category $\mathbb{C}$ and an endofunctor $F: \mathbb{C} \rightarrow \mathbb{C}$, then an
-F-algebra is a tuple $(A,f)$ where,
+$F$-algebra is a tuple $(A,f)$ where,
 
--   $A$ is an object in $C$ is called the *carrier* of the algebra.
--   $f$ is a morphism $FA \rightarrow A$.
+-   $A$ is an object in $\mathbb{C}$ and is called the *carrier* of the algebra.
+-   $f$ is a morphism: $f: FA \rightarrow A$.
 
-A homomorphism from an F-algebra $(A,\alpha)$ to another F-algebra
+A homomorphism from an $F$-algebra $(A,\alpha)$ to another $F$-algebra
 $(B,\beta)$ is a morphism $\mathbb{C}(A,B)$ such that:
 
--   $f \circ a = F(f) \circ b$.
+-   $f \circ \alpha = \beta \circ F f$.
 
 $$
 \begin{tikzcd}
@@ -227,30 +227,30 @@ $$
 $$
 
 In Haskell, the following definition is found in
-`Control.Functor.Algebra` which corresponds to an F-algebra.
+`Control.Functor.Algebra` which corresponds to an $F$-algebra.
 
 ```
 type Algebra f a = f a -> a
 ```
 
-The F-algebra is called an *initial F-algebra* when there exists a unique
-morphism from the initial F-algebra to all other F-algebras i.e. there is only one.
+The $F$-algebra is called an *initial* when there exists a unique
+morphism from itself to all other $F$-algebras i.e. there is only one.
 
-The category of F-algebras constitutes F-algebras as objects and the
-F-algebra homomorphisms, the morphisms. The category can be used to
-model how the data structure i.e. lists or trees can be transformed. The
-initial algebra of the category corresponds to our initial data
+The category of $F$-algebras, denoted $\mathbb{ALG}(F)$, constitutes $F$-algebras as objects and the
+$F$-algebra homomorphisms, the morphisms. The category can be used to
+model how the data structure i.e. lists or trees, can be transformed. The
+initial algebra of the category corresponds to our data
 structure and the algebras correspond to the function that can be
 performed on the data structure.
 
 ### Products and Coproducts
-Many new data types can be formed from composition or tupling existing
-datatypes together. These concept exists in a category-theoretic
+Many new data types can be formed from composition or by tupling existing
+datatypes together. This concept exist in a category-theoretic
 perspective called: products and coproducts.
 
-Product of two objects $A, B$ in a category theory is formalised to
-capture the same concept as another constructions in other areas of mathematics
-e.g. the cartesian product in set theory. It
+The product of two objects $A$ and $B$ in a category theory is formalised to
+capture the same concept as other constructions in mathematics
+such as the cartesian product in set theory. It
 (a product of two objects) is defined as:
 
 * an object: denoted $A \times B$.
@@ -271,7 +271,7 @@ A & A \times B \arrow[l,"outl"] \arrow[r,"outr"] & B
 $$
 
 A coproduct is the categorical dual of a product, which means that the definition is the same
-except the morphisms are reverse. Despite its dual nature, they typically are drastically different from each other.
+except the morphisms are reversed. Despite its dual nature, they typically are drastically different from each other.
 It consists of:
 
 * an object: denoted $A + B$
@@ -307,13 +307,22 @@ imperatively: allowing for unsafe IO, state etc. As long as the model of
 computation, a category, provides intuition and various categorical
 abstractions as a way to solve problems, it should be embraced.
 
+### Bibliographical Remarks
+
+In the section, the use of category theory in the computer science
+community is well documented. There are numerous textbooks and resources
+available for those who wish to go further. The definitions here are summarised
+from [@Bird:1997:AP:248932] and [@bigbook], this
+is because its definitions are easier to follow by foregoing some of its
+mathematical rigor.
+
 3 Explicit and Structured Recursion
 -----------------------------------
 
 Recursion, in its essence, is something defined in terms of itself. It is
-a simple yet powerful concept that forms the bread and butter for
+a simple yet powerful concept that forms the bread and butter of
 functional computation. Explicit recursion is a way of describing self
-referencing functions that is overused for the uninitiated. Arbitrary
+referencing functions that is overused by the uninitiated. Arbitrary
 properties of the explicitly recursive function will need to be
 theorised and proved over and over again, which can be simply avoided by
 carefully abstracting away the common recursive patterns.
@@ -330,7 +339,7 @@ type of program semantics called operational semantics [@Hutton] where the
 meaning of the program is defined in terms of transition functions
 during program execution.
 
-It has been known for a long time that the use of `gotos` in imperative
+It has been well established that the use of `gotos` in imperative
 programming obscures the structure of the program and reduces the
 programmer's ability to reason with their code [@Dijkstra:1968:LEG:362929.362947]. For the same
 reason, `gotos` should be avoided. We should always use structured
@@ -369,8 +378,8 @@ it.
 
 ### 4.2 Derivation
 
-Given an initial F-algebra $(T,\alpha)$, there is a unique homomorphism to all
-F-algebras in Alg(F) by definition of initiality. The catamorphism, denoted $\llparenthesis f \rrparenthesis$,
+Given an initial $F$-algebra $(T,\alpha)$, there is a unique homomorphism to all
+$F$-algebras in $\mathbb{ALG}(F)$ by definition of initiality. The catamorphism, denoted $\llparenthesis f \rrparenthesis$,
 corresponds to the observation of
 this homomorphism from the initial algebra to some algebra.
 
@@ -477,7 +486,7 @@ $\langle \llparenthesis h \rrparenthesis ,\llparenthesis k \rrparenthesis \rangl
 
 $$
 \begin{matrix}
-  & F\ T & \underset{In}{\to} & T \\
+  & F\ T & \underset{\alpha}{\to} & T \\
   F\ \langle \llparenthesis h \rrparenthesis ,\llparenthesis k \rrparenthesis \rangle & \downarrow& & \downarrow & \langle \llparenthesis h \rrparenthesis ,\llparenthesis k \rrparenthesis \rangle\\
   & F\ A & \underset{\langle h \circ F\ outl , k \circ F\ outr \rangle}{\to} & A
 \end{matrix}
@@ -497,7 +506,7 @@ Proof:
   & \langle h \circ F\ outl , k \circ F\ outr \rangle \circ F\ \langle \llparenthesis h \rrparenthesis ,\llparenthesis k \rrparenthesis \rangle
 \end{align*}
 
-5 Datatypes as Initial F-Algebras
+5 Datatypes as Initial $F$-Algebras
 -----------------------------
 
 To yield the power of the catamorphism, it requires the data structure to
@@ -542,32 +551,31 @@ In addition, the functor instance definition, in Haskell, of `ExprF` also corres
     fmap f (Add x y) = Add (f x) (f x)
 ```
 
-Notice that the recursive spot in `Expr` has be parameterised with `x`.
+Notice that the recursive spot in `Expr` has been parameterised with `x`.
 In this new definition of `Expr`, `ExprF`, its type has been defined
 in terms of its subexpression - it is almost identical to the original `Expr`.
-
-However, `ExprF` is not quite equivalent, it need to somehow arbitrarily
+However, `ExprF` is not quite equivalent. It needs to somehow arbitrarily
 nest `ExprF` in the definition.
 
 ### 5.2 Initiality
 
 Consider the following `Expr` forming operations:
 
-$$ Val : 1 \rightarrow ExprF A $$
-$$ Add : ExprF A \times ExprF A \rightarrow ExprF A $$
+$$ Val : 1 \rightarrow ExprF\ A $$
+$$ Add : ExprF\ A \times ExprF\ A \rightarrow ExprF\ A $$
 
 This can be combined into a single operation using the concept of a coproduct.
 
 $$
-{[Val, Add]} : 1 \times (Expr A \times Expr A) \rightarrow Expr A
+{[Val, Add]} : 1 + (ExprF\ A \times ExprF\ A) \rightarrow ExprF\ A
 $$
 
 This forms an algebra and is, in fact, *initial*.
 
-Initial F-algebra for a given endofunctor, is interestingly unique
+The initial $F$-algebra for a given endofunctor, is interestingly unique
 up to isomorphism. This means that, even though there could be many forms
 of the initial object, it does not matter which is used. From the above,
-it is seen that coproducts can produce initial f-algebras - this is not the only way. By
+it is seen that coproducts can produce initial $F$-algebras - this is not the only way. By
 taking the fix point of the pattern functor, it is initial [@free] and exists [@DBLP:journals/scp/Malcolm90].
 
 In lambda calculus, it is not possible to refer to the function
@@ -584,18 +592,18 @@ This concept can be defined in Haskell's type definition as follows:
   newtype Fix f = In { out :: f (Fix f) }
 ```
 
-By using `Fix`, the corresponding pattern functor can be used to defined
+By using `Fix`, the corresponding pattern functor can be used to define
 the *fixed point of functors*, which is isomorphic to the
 original definition,
 
-$$ Fix ExprF \cong Expr $$
+$$ Fix\ ExprF \cong Expr $$
 
 
 6 Program Termination
 ---------------------
 
 As seen, by using the simplest example of the recursion schemes,
-there is an catalogue of extremely useful laws that is obtained for free by structuring recursion.
+there is an catalogue of extremely useful laws that are obtained for free by structuring recursion.
 Another byproduct of using certain recursion schemes is that it gives us
 the ability to reason with the termination of the program.
 
@@ -603,8 +611,8 @@ Catamorphism allows the programmer to guarantee its termination. The
 function calls are made only on smaller elements of the inductively
 defined structure, implying that it will tend towards its base case, giving
 program termination. This is also true for the paramorphism. However, with
-explicit recursion, there is nothing to stop the programmer to
-recursively call the function on a larger data type causing it to never
+explicit recursion, there is nothing to stop the programmer from
+recursively calling the function on a larger data type causing it to never
 terminate.
 
 Conclusion
@@ -612,9 +620,9 @@ Conclusion
 
 The purpose of this report was to show an in-depth analysis of the
 catamorphism as an example from the set of recursion schemes.
-To achieve this, simple concepts in category theory was introduced
+To achieve this, simple concepts in category theory were introduced,
 motivated by the fact that these ideas can be used to streamline the derivation process.
-Many of its core ideas have found its way into functional programs and
+Many of its core ideas have found their way into functional programs and
 thus, into this report. The reader must recognise how successful it is
 as a model of computation.
 
@@ -625,12 +633,12 @@ variations of recursion - some more useful than others. This growth has
 turned the set into a zoo of morphisms with attempts to unify them into
 a single scheme.
 
-However powerful these recursion schemes are, they are not turing
+However, no matter how powerful these recursion schemes are, they are not turing
 complete. This is a property that (most) GPLs have but may not be
 necessary for DSLs. In general, it is true that DSLs are not, and
-incorporating it as part of the language is unneeded. It will introduce
+incorporating them as part of a language is not needed. It will introduce
 unnecessary complexities in the language which is exactly what DSLs are
-trying to avoid. In my opinion, the fight to tame recursion will never be won - if
+trying to avoid. In my opinion, the fight to tame recursion will never be won; if
 it gains turing completeness, the ability to reason will be lost.
 
 In the future:
@@ -638,10 +646,10 @@ In the future:
 * a similar approach to this report can be taken but with
   generalised unfolds to derive and structure operational
   semantics.
-* an analysis into different representations of initial f-algebras
-  as datatypes in programming.
-* an investigation into how extensive and successful category theory
-  is as a model for functional programs.
+* a report could document the analysis of different representations of initial $F$-algebras
+  as datatypes in program construction.
+* an investigation could formulise how extensive and successful category theory
+  is as a model for computation.
 
 \newpage
 
