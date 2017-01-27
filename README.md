@@ -11,3 +11,4 @@ that even with its abstract nature, it has very practical implications. Includin
 developing its algebra.
 
 ## Abstract
+This report discusses structured recursion to derive program semantics. In particular, the denotational semantics which can be structured as a fold motivates a close examination of its generalised notion as a recursive operation: the catamorphism.
